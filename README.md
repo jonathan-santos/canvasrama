@@ -1,0 +1,2 @@
+# Canvasrama
+Uma fliperama online de jogos clássicos refeitos com HTML, CSS e Javascript, usando o Canvas. Feito como um lugar pra guardar meus estudos do livro [A Lógica do jogo](https://www.casadocodigo.com.br/products/livro-logica-jogo) de [Marcus Becker](https://github.com/marcusbecker). É claro, no livro ele ensina a fazer os jogos usando Java, mas decidi adaptar para Canvas pra ser mais divertido.
