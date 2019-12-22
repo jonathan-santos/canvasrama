@@ -22,16 +22,39 @@ const game = () => {
     ctx.fillText(`A caixa está na posição x: ${x}, y: ${y}`, 30, 50)
 }
 
-const keyboardEvents = [
-    { key: 'd', event: 'keydown', action: () => xVelocity = 1 },
-    { key: 'd', event: 'keyup', action: () => xVelocity = 0 },
-    { key: 'a', event: 'keydown', action: () => xVelocity = -1 },
-    { key: 'a', event: 'keyup', action: () => xVelocity = 0 },
-    { key: 'w', event: 'keydown', action: () => yVelocity = -1 },
-    { key: 'w', event: 'keyup', action: () => yVelocity = 0 },
-    { key: 's', event: 'keydown', action: () => yVelocity = 1 },
-    { key: 's', event: 'keyup', action: () => yVelocity = 0 },
+gameLib.inputEvents = [
+    {
+        event: 'keydown',
+        eventType: 'keyboard',
+        values: [
+            { key: 'd', action: () => xVelocity = 1 },
+            { key: 'a', action: () => xVelocity = -1 },
+            { key: 'w', action: () => yVelocity = -1 },
+            { key: 's', action: () => yVelocity = 1 },
+        ]
+    },
+    {
+        event: 'keyup',
+        eventType: 'keyboard',
+        values: [
+            { key: 'd', action: () => {
+                if(xVelocity == 1)
+                    xVelocity = 0
+            }},
+            { key: 'a', action: () => {
+                if(xVelocity == -1)
+                    xVelocity = 0
+            }},
+            { key: 'w', action: () => {
+                if(yVelocity == -1)
+                    yVelocity = 0
+            }},
+            { key: 's', action: () => {
+                if(yVelocity == 1)
+                    yVelocity = 0
+            }}
+        ]
+    }
 ]
 
-gameLib.preGame(keyboardEvents)
 gameLib.initGame(game)

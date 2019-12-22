@@ -34,4 +34,4 @@ const game = () => {
     count++
 }
 
-initGame(game)
+gameLib.initGame(game)

@@ -2,24 +2,38 @@ const canvas = document.querySelector('#game')
 const ctx = canvas.getContext('2d')
 
 const gameLib = {
-    preGame: (keyboardEvents) => {
-        document.addEventListener('keydown', (e) => {
-            keyboardEvents.filter(k => k.event == 'keydown')
-                .map(k => {
-                    if(e.key == k.key) {
-                        k.action()
-                    }
-                });
-        })
+    inputEvents: null,
+
+    preGame: () => {
+        gameLib.registerInputEvents()
+    },
+
+    registerInputEvents: () => {
+        if(gameLib.inputEvents == null)
+            return
+            
+        const createEventListener = (inputEvent) => {
+            document.addEventListener(inputEvent.event, (eventParam) => {
+                handleInputEventValues(inputEvent, eventParam)
+            })
+        }
+
+        const handleInputEventValues = (inputEvent, eventParam) => {
+            inputEvent.values.map((inputEventValue) => {
+                if(inputEvent.eventType == 'keyboard') {
+                    handleKeyboardInput(inputEventValue, eventParam)
+                } else if(inputEvent.eventType == 'mouse') {
+                    handleMouseINput(inputEventValue, eventParam)
+                }    
+            })
+        }
+
+        const handleKeyboardInput = (inputEventValue, eventParam) => {
+            if(eventParam.key == inputEventValue.key)
+                inputEventValue.action()
+        }
         
-        document.addEventListener('keyup', (e) => {
-            keyboardEvents.filter(k => k.event == 'keyup')
-                .map(k => {
-                    if(e.key == k.key) {
-                        k.action()
-                    }
-                });
-        })
+        gameLib.inputEvents.map(inputEvent => createEventListener(inputEvent))
     },
 
     initGame: (game, fps = 1000 / 30) => {
