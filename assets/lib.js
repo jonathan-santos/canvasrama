@@ -81,6 +81,19 @@ const gameLib = {
     }
 }
 
+ctx.drawButton = (x, y, width, height, text, borderColor = '#333', backgroundColor = '#eee', textColor = '#333') => {
+    ctx.strokeStyle = borderColor
+    ctx.fillStyle = backgroundColor
+
+    ctx.strokeRect(x, y, width, height)
+    ctx.fillRect(x + 1, y + 1, width - 1, height - 1)
+
+    ctx.fillStyle = textColor
+    ctx.font = '20px serif'
+    const textPositionX = x + (width / 2) - (text.length * 4)
+    ctx.fillText(text, textPositionX, y + height / 2 + 5)
+}
+
 ctx.drawOval = (x, y, size, fill = true) => {
     if(size < 0)
         size = 0
