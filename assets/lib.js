@@ -2,20 +2,55 @@ const canvas = document.querySelector('#game')
 const ctx = canvas.getContext('2d')
 
 const gameLib = {
-    inputEvents: null,
+    currentScene: null,
+    eventsHandlers: null,
 
-    preGame: () => {
-        gameLib.registerInputEvents()
+    loadScene: function(scene, fps = 1000 / 30) {
+        if(scene == null)
+            return
+
+        if(this.currentScene != null) {
+            this.removeInputEvents(this.currentScene.inputEvents)
+            clearInterval(this.currentScene.loopID)
+        }
+
+        this.currentScene = scene
+
+        this.registerInputEvents(scene.inputEvents)
+
+        if(scene.start != null) {
+            scene.start.bind(scene)
+            scene.start()
+        }
+
+        if(scene.update != null) {
+            scene.update.bind(scene)
+            scene.loopID = setInterval(
+                handler = () => scene.update(),
+                timeout = fps
+            )
+        }
     },
 
-    registerInputEvents: () => {
-        if(gameLib.inputEvents == null)
+    removeInputEvents: (inputEvents) => {
+        if(inputEvents == null)
+            return
+
+        inputEvents.map(inputEvent => {
+            document.removeEventListener(inputEvent.event, inputEvent.eventHandler)
+        })
+    },
+
+    registerInputEvents: (inputEvents) => {
+        if(inputEvents == null)
             return
 
         const createEventListener = (inputEvent) => {
-            document.addEventListener(inputEvent.event, (eventParam) => {
+            inputEvent.eventHandler = (eventParam) => {
                 handleInputEventValues(inputEvent, eventParam)
-            })
+            }
+
+            document.addEventListener(inputEvent.event, inputEvent.eventHandler)
         }
 
         const handleInputEventValues = (inputEvent, eventParam) => {
@@ -46,7 +81,7 @@ const gameLib = {
             inputEventValue.action(eventParam, mousePos)
         }
         
-        gameLib.inputEvents.map(inputEvent => createEventListener(inputEvent))
+        inputEvents.map(inputEvent => createEventListener(inputEvent))
     },
 
     isPosOutOfGameViewport: (pos, elementWidth = 0, elementHeight = 0) => {
@@ -71,13 +106,6 @@ const gameLib = {
         }
 
         return pos
-    },
-
-    initGame: (game, fps = 1000 / 30) => {
-        gameLib.preGame()
-    
-        const loop = setInterval(game, fps)
-        return loop
     }
 }
 
