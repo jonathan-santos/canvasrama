@@ -119,7 +119,7 @@ const gameScene = {
 
     gameOver: () => {
         clearInterval(this.scoreLoopID)
-        gameLib.loadScene(gameOverScene)
+        Game.loadScene(gameOverScene)
     },
 
     inputEvents: [
@@ -180,12 +180,12 @@ const gameOverScene = {
             y = restartButton.pos.y,
             width = restartButton.width,
             height = restartButton.height,
-            text = restartButton.text
+            text = restartButton.text,
         )
     },
 
     restartGame: () => {
-        gameLib.loadScene(gameScene)
+        Game.loadScene(gameScene)
     },
 
     inputEvents: [
@@ -201,18 +201,12 @@ const gameOverScene = {
             eventType: 'mouse',
             values: [
                 { action: (e, mousePos) => {
-                    if(gameLost) {
-                        if(mousePos.x > restartButton.pos.x
-                            && mousePos.x < restartButton.pos.x + restartButton.width
-                            && mousePos.y > restartButton.pos.y
-                            && mousePos.y < restartButton.pos.y + restartButton.height
-                        )
-                            gameOverScene.restartGame()
-                    }
+                    if(Game.utils.detectCollision(Game.newElement({ pos: mousePos }), restartButton))
+                        gameOverScene.restartGame()
                 }}
             ]
         }
     ]
 }
 
-gameLib.loadScene(gameScene)
+Game.loadScene(gameScene)

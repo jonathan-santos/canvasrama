@@ -1,7 +1,7 @@
 const canvas = document.querySelector('#game')
 const ctx = canvas.getContext('2d')
 
-const gameLib = {
+const Game = {
     currentScene: null,
     eventsHandlers: null,
 
@@ -16,6 +16,7 @@ const gameLib = {
 
         this.currentScene = scene
 
+        Game.registerInputEvents.bind(scene)
         this.registerInputEvents(scene.inputEvents)
 
         if(scene.start != null) {
@@ -31,6 +32,19 @@ const gameLib = {
             )
         }
     },
+
+    newElement: (params) => ({
+        pos: { x: 0, y: 0},
+        width: 0,
+        height: 0,
+        enabled: true,
+        speed: 0,
+        velocity: {
+            x: 0,
+            y: 0
+        },
+        ...params
+    }),
 
     removeInputEvents: (inputEvents) => {
         if(inputEvents == null)
@@ -75,7 +89,8 @@ const gameLib = {
                 y: Math.floor(eventParam.clientY - canvasRect.top)
             }
 
-            if(!inputEventValue.canGetOutOfViewport && gameLib.isPosOutOfGameViewport(mousePos))
+            const mousePosElement = Game.newElement({ pos: mousePos })
+            if(!inputEventValue.canGetOutOfViewport && Game.utils.isElementOutOfViewport(mousePosElement))
                 return
 
             inputEventValue.action(eventParam, mousePos)
@@ -84,40 +99,57 @@ const gameLib = {
         inputEvents.map(inputEvent => createEventListener(inputEvent))
     },
 
-    isPosOutOfGameViewport: (pos, elementWidth = 0, elementHeight = 0) => {
-        return (
-            pos.x < 0
-            || (pos.x + elementWidth) > canvas.width
-            || pos.y < 0
-            || (pos.y + elementHeight) > canvas.height
-        )
-    },
+    utils: {
+        detectCollision: (element1, element2) => (
+            element1.pos.x > element2.pos.x
+            && (element1.pos.x + element1.width) < (element2.pos.x + element2.width)
+            && element1.pos.y > element2.pos.y
+            && (element1.pos.y + element1.height)  < (element2.pos.y + element2.height)
+        ),
 
-    getPosInsideOfGameViewport: (pos, elementWidth = 0, elementHeight = 0) => {
-        if(pos.x < 0) {
-            pos.x = 0
-        } else if((pos.x + elementWidth) > canvas.width) {
-            pos.x = canvas.width - elementWidth
-        }
-        if(pos.y < 0) {
-            pos.y = 0
-        } else if((pos.y + elementHeight) > canvas.height) {
-            pos.y = canvas.height - elementHeight
-        }
+        isElementOutOfViewport: (element) => (
+            element.pos.x < 0
+            || (element.pos.x + element.width) > canvas.width
+            || element.pos.y < 0
+            || (element.pos.y + element.height) > canvas.height
+        ),
+    
+        changeElementPosInViewport: (element, newPos) => {
+            if(newPos.x < 0) {
+                newPos.x = 0
+            } else if((newPos.x + element.width) > canvas.width) {
+                newPos.x = canvas.width - element.width
+            }
 
-        return pos
+            if(newPos.y < 0) {
+                newPos.y = 0
+            } else if((newPos.y + element.height) > canvas.height) {
+                newPos.y = canvas.height - element.height
+            }
+    
+            element.pos = newPos
+        }
     }
 }
 
-ctx.drawButton = (x, y, width, height, text, borderColor = '#333', backgroundColor = '#eee', textColor = '#333') => {
-    ctx.strokeStyle = borderColor
-    ctx.fillStyle = backgroundColor
+ctx.drawButton = (x, y, width, height, text, style) => {
+    style = {
+        borderColor: '#333',
+        backgroundColor: '#eee',
+        color: '#333',
+        font: '20px serif',
+        ...style
+    }
+
+    ctx.strokeStyle = style.borderColor
+    ctx.fillStyle = style.backgroundColor
 
     ctx.strokeRect(x, y, width, height)
     ctx.fillRect(x + 1, y + 1, width - 1, height - 1)
 
-    ctx.fillStyle = textColor
-    ctx.font = '20px serif'
+    ctx.fillStyle = style.color
+    ctx.font = style.font
+
     const textPositionX = x + (width / 2) - (text.length * 4)
     ctx.fillText(text, textPositionX, y + height / 2 + 5)
 }
