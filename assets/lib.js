@@ -33,18 +33,30 @@ const Game = {
         }
     },
 
-    newElement: (params) => ({
-        pos: { x: 0, y: 0},
-        width: 0,
-        height: 0,
-        enabled: true,
-        speed: 0,
-        velocity: {
-            x: 0,
-            y: 0
-        },
-        ...params
-    }),
+    newElement: (params) => {
+        const element = {
+            pos: { x: 0, y: 0},
+            width: 0,
+            height: 0,
+            enabled: true,
+            speed: 0,
+            velocity: {
+                x: 0,
+                y: 0
+            },
+            color: 'blue',
+            renderer: 'boxColor',
+            draw: function () {
+                if(this.enabled)
+                    Game.renderers[this.renderer](this)
+            },
+            ...params
+        }
+
+        element.draw.bind(element)
+        
+        return element
+    },
 
     removeInputEvents: (inputEvents) => {
         if(inputEvents == null)
@@ -100,12 +112,17 @@ const Game = {
     },
 
     utils: {
-        detectCollision: (element1, element2) => (
-            element1.pos.x > element2.pos.x
-            && (element1.pos.x + element1.width) < (element2.pos.x + element2.width)
-            && element1.pos.y > element2.pos.y
-            && (element1.pos.y + element1.height)  < (element2.pos.y + element2.height)
-        ),
+        detectCollision: (element1, element2) => {
+            if(!element1.enabled || !element2.enabled)
+                return false
+            
+            return (
+                element1.pos.x > element2.pos.x
+                && (element1.pos.x + element1.width) < (element2.pos.x + element2.width)
+                && element1.pos.y > element2.pos.y
+                && (element1.pos.y + element1.height)  < (element2.pos.y + element2.height)
+            )
+        },
 
         isElementOutOfViewport: (element) => (
             element.pos.x < 0
@@ -129,7 +146,35 @@ const Game = {
     
             element.pos = newPos
         }
+    },
+
+    renderers: {
+        boxColor: (element) => {
+            ctx.fillStyle = element.color
+            ctx.fillRect(element.pos.x, element.pos.y, element.width, element.height)
+        },
+
+        circleColor: (element) => {
+            ctx.fillStyle = element.color
+            ctx.drawOval(element.pos.x, element.pos.y, element.width)
+        },
+
+        button: (element) => {
+            ctx.drawButton(
+                x = element.pos.x,
+                y = element.pos.y,
+                width = element.width,
+                height = element.height,
+                text = element.text,
+                element.style
+            )
+        }
     }
+}
+
+ctx.drawBackdrop = (opacity) => {
+    ctx.fillStyle = `rgb(0, 0, 0, ${opacity})`
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
 }
 
 ctx.drawButton = (x, y, width, height, text, style) => {
@@ -167,9 +212,24 @@ ctx.drawOval = (x, y, size, fill = true) => {
         ctx.stroke()
 }
 
-ctx.drawLine = (x, y, endX, endY) => {
+ctx.drawLine = (x, y, endX, endY, color = '#333') => {
+    ctx.strokeStyle = color
+
     ctx.beginPath()
     ctx.moveTo(x, y)
     ctx.lineTo(endX, endY)
     ctx.stroke()
+}
+
+ctx.drawText = (text, x, y, style) => {
+    style = {
+        color: '#333',
+        font: '20px serif',
+        ...style
+    }
+
+    ctx.font = style.font
+    ctx.fillStyle = style.color
+
+    ctx.fillText(text, x, y, style.maxWidth)
 }

@@ -15,7 +15,7 @@ const interacaoScene = {
             velocity: {
                 x: 0,
                 y: 0
-            }
+            },
         })
 
         this.newMousePos = null
@@ -37,18 +37,13 @@ const interacaoScene = {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
     
         // Quadrado
-        ctx.fillStyle = 'rgb(0,0,200)'
-        ctx.fillRect(this.player.pos.x, this.player.pos.y, this.player.width, this.player.height)
+        this.player.draw()
     
         // Controles
-        ctx.fillStyle = '#333'
-        ctx.font = '20px serif'
-        ctx.fillText('Movimente-se com o WASD ou com o clique do mouse', 10, 20)
+        ctx.drawText('Movimente-se com o WASD ou com o clique do mouse', 10, 20)
     
         // Posição do quadrado
-        ctx.fillStyle = 'rgb(200, 0, 0)'
-        ctx.font = '20px serif'
-        ctx.fillText(`O jogador está na posição x: ${this.player.pos.x}, y: ${this.player.pos.y}`, 10, 40)
+        ctx.drawText(`O jogador está na posição x: ${this.player.pos.x}, y: ${this.player.pos.y}`, 10, 40, { color: 'rgb(200, 0, 0)' })
     },
 
     inputEvents: [
