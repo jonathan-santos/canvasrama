@@ -44,7 +44,7 @@ const gameScene = {
                 },
                 width: 50,
                 height: 50,
-                speed: Math.floor(Math.random() * 2 + 1),
+                speed: Math.floor(Math.random() * 1.5 + 1),
                 color: 'rgb(0, 200, 0)'
             }))
         }

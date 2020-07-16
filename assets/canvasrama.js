@@ -6,7 +6,7 @@ const Game = {
     eventsHandlers: null,
 
     loadScene: function(scene, fps = 1000 / 30) {
-        if(scene == null)
+        if(!scene)
             return
 
         if(this.currentScene != null) {
@@ -59,7 +59,7 @@ const Game = {
     },
 
     removeInputEvents: (inputEvents) => {
-        if(inputEvents == null)
+        if(!inputEvents)
             return
 
         inputEvents.map(inputEvent => {
@@ -68,7 +68,7 @@ const Game = {
     },
 
     registerInputEvents: (inputEvents) => {
-        if(inputEvents == null)
+        if(!inputEvents)
             return
 
         const createEventListener = (inputEvent) => {
