@@ -96,10 +96,10 @@ const gameScene = {
         ctx.drawLine(0, 700, canvas.width, 700)
     
         // Controls
-        ctx.drawText('Movimente-se com o A ou S e atire com o clique do mouse ou espaço', 10, 20)
+        ctx.drawText('Move with the A and S keys and shoot with the space key or right-clicking with the mouse', 10, 20)
     
         // Score
-        ctx.drawText(`Pontos: ${this.score}`, 10, 40, { color: 'rgb(200, 0, 0)'})
+        ctx.drawText(`Score: ${this.score}`, 10, 40, { color: 'rgb(200, 0, 0)'})
 
         if(this.gameLost)
             gameScene.gameOver()
@@ -152,13 +152,13 @@ const gameOverScene = {
             },
             width: 180,
             height: 60,
-            text: 'Jogar de novo?',
+            text: 'Play Again?',
             renderer: 'button'
         })
 
         ctx.drawBackdrop(0.35)
 
-        ctx.drawText('Você perdeu!', 480, restartButton.pos.y - 100, { color: 'rgb(200, 0, 0)', font: '60px serif' })
+        ctx.drawText('You lose!', 520, restartButton.pos.y - 100, { color: 'rgb(200, 0, 0)', font: '60px serif' })
 
         this.restartButton.draw()
     },

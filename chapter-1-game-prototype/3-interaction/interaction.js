@@ -1,4 +1,4 @@
-const interacaoScene = {
+const interactionScene = {
     player: null,
     newMousePos: 0,
 
@@ -36,14 +36,14 @@ const interacaoScene = {
     
         ctx.clearRect(0, 0, canvas.width, canvas.height)
     
-        // Quadrado
+        // Box
         this.player.draw()
     
-        // Controles
-        ctx.drawText('Movimente-se com o WASD ou com o clique do mouse', 10, 20)
+        // Controls text
+        ctx.drawText('Move with WASD keys or with a mouse click', 10, 20)
     
-        // Posição do quadrado
-        ctx.drawText(`O jogador está na posição x: ${this.player.pos.x}, y: ${this.player.pos.y}`, 10, 40, { color: 'rgb(200, 0, 0)' })
+        // Box position text
+        ctx.drawText(`The player is in position x: ${this.player.pos.x}, y: ${this.player.pos.y}`, 10, 40, { color: 'rgb(200, 0, 0)' })
     },
 
     inputEvents: [
@@ -92,4 +92,4 @@ const interacaoScene = {
     ]
 }
 
-Game.loadScene(interacaoScene)
+Game.loadScene(interactionScene)
