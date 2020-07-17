@@ -1,18 +1,248 @@
+:root {
+    --main-color: #23B2EE;
+    --border-color: #14688b;
+    --button-color: #CCCCCC;
+    --pressed-button-color: #AAAAAA;
+    --button-text-color: #333333;
+    --background-color: #EEEEEE;
+    --button-border: 3px solid var(--pressed-button-color);
+    --arrow-button-border-radius: 25px;
+}
+
 html, body {
     margin: 0;
     padding: 0;
+    background-color: var(--background-color);
 }
 
-.game {
-    height: 100vh;
+.canvasrama {
+    border: 2px solid var(--border-color);
+    border-radius: 25px;
     box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: black;
+    padding: 1rem;
+    background-color: var(--main-color);
+    display: grid;
+    grid-template-columns: 4rem 4rem 4rem 2rem auto 4rem 4rem 4rem;
+    grid-template-rows: 40% 4rem 4rem 4rem auto;
 }
 
-#game {
-    background-color: #fff;
+    .canvasrama.full-screen {
+        height: 100vh;
+    }
+
+.canvasrama canvas {
+    grid-column: 5;
+    grid-row-start: 1;
+    grid-row-end: 7;
+    align-self: center;
+    box-sizing: border-box;
     max-width: 100%;
+    border: 2px solid var(--border-color);
+    background-color: #fff;
 }
+
+.canvasrama button {
+    position: relative;
+    border: 0;
+    box-sizing: border-box;
+    background-color: var(--button-color);
+    border: var(--button-border);
+    font-size: 2.5rem;
+    color: var(--button-text-color);
+    line-height: 4rem;
+}
+
+    .canvasrama .up {
+        grid-column: 2;
+        grid-row: 2;
+        border-bottom: 0;
+        border-top-left-radius: var(--arrow-button-border-radius);
+        border-top-right-radius: var(--arrow-button-border-radius);
+    }
+
+    .canvasrama .right {
+        grid-column: 3;
+        grid-row: 3;
+        border-left: 0;
+        border-top-right-radius: var(--arrow-button-border-radius);
+        border-bottom-right-radius: var(--arrow-button-border-radius);
+    }
+
+    .canvasrama .down {
+        grid-column: 2;
+        grid-row: 4;
+        border-top: 0;
+        border-bottom-left-radius: var(--arrow-button-border-radius);
+        border-bottom-right-radius: var(--arrow-button-border-radius);
+    }
+
+    .canvasrama .left {
+        grid-column: 1;
+        grid-row: 3;
+        border-right: 0;
+        border-top-left-radius: var(--arrow-button-border-radius);
+        border-bottom-left-radius: var(--arrow-button-border-radius);
+    }
+
+    .canvasrama .circle, .canvasrama .square {
+        width: 5rem;
+        height: 5rem;
+        line-height: 5rem;
+        align-self: center;
+        justify-self: center;
+        border-radius: 100%;
+    }
+
+    .canvasrama .circle {
+        grid-column: 6 / span 2;
+        grid-row: 3 / span 2;
+    }
+
+    .canvasrama .square {
+        grid-column: 7   / span 2;
+        grid-row: 2  / span 2;
+    }
+
+    .canvasrama .center {
+        border: 0;
+        grid-column: 2;
+        grid-row: 3;    
+        width: 4rem;
+        height: 4rem;      
+        background-color: var(--pressed-button-color);
+    }
+
+    .canvasrama .arrow {
+        position: absolute;
+        width: 0; 
+        height: 0; 
+        border: 1.8rem solid var(--button-color);
+        z-index: 1;
+    }
+
+        .canvasrama .arrow.arrow-button-up {
+            left: 0;
+            bottom: -1.8rem;
+            border-bottom: 0;
+            border-left-color: transparent;
+            border-right-color: transparent;
+        }
+
+        .canvasrama  .arrow.arrow-button-right {
+            top: 0;
+            left: -1.8rem;
+            border-left: 0;
+            border-top-color: transparent;
+            border-bottom-color: transparent; 
+        }
+
+        .canvasrama .arrow.arrow-button-down {
+            top: -1.8rem;
+            left: 0;
+            border-top: 0;
+            border-left-color: transparent;
+            border-right-color: transparent;
+        }
+            
+        .canvasrama .arrow.arrow-button-left {
+            top: 0;
+            right: -1.8rem;
+            border-right: 0;
+            border-top-color: transparent;
+            border-bottom-color: transparent;
+        }
+
+    .canvasrama button:active {
+        background-color: var(--pressed-button-color);
+    }
+
+        .canvasrama .up:active .arrow.arrow-button-up {
+            border-top-color: var(--pressed-button-color);
+        }
+
+        .canvasrama .right:active .arrow.arrow-button-right {
+            border-right-color: var(--pressed-button-color);
+        }
+
+        .canvasrama .down:active .arrow.arrow-button-down {
+            border-bottom-color: var(--pressed-button-color);
+        }
+
+        .canvasrama .left:active .arrow.arrow-button-left {
+            border-left-color: var(--pressed-button-color);
+        }
+
+/* #region  */
+@font-face {
+    font-family: 'canvasrama';
+    src:  url('./assets/fonts/canvasrama.eot?4sxejq');
+    src:  url('./assets/fonts/canvasrama.eot?4sxejq#iefix') format('embedded-opentype'),
+      url('./assets/fonts/canvasrama.ttf?4sxejq') format('truetype'),
+      url('./assets/fonts/canvasrama.woff?4sxejq') format('woff'),
+      url('./assets/fonts/canvasrama.svg?4sxejq#canvasrama') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+  }
+  
+  i {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'canvasrama' !important;
+    speak: never;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+  
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  .icon-triangle:before {
+    content: "\e900";
+  }
+  .icon-enlarge:before {
+    content: "\e989";
+  }
+  .icon-shrink:before {
+    content: "\e98a";
+  }
+  .icon-settings:before {
+    content: "\e994";
+  }
+  .icon-power:before {
+    content: "\e9b6";
+  }
+  .icon-download:before {
+    content: "\e9c7";
+  }
+  .icon-cross:before {
+    content: "\ea0f";
+  }
+  .icon-play:before {
+    content: "\ea1c";
+  }
+  .icon-pause:before {
+    content: "\ea1d";
+  }
+  .icon-up:before {
+    content: "\ea32";
+  }
+  .icon-right:before {
+    content: "\ea34";
+  }
+  .icon-down:before {
+    content: "\ea36";
+  }
+  .icon-left:before {
+    content: "\ea38";
+  }
+  .icon-square:before {
+    content: "\ea53";
+  }
+  .icon-circle:before {
+    content: "\ea56";
+  }  
+/* #endregion */

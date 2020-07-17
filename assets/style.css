@@ -1,0 +1,72 @@
+@font-face {
+  font-family: 'canvasrama';
+  src:  url('fonts/canvasrama.eot?4sxejq');
+  src:  url('fonts/canvasrama.eot?4sxejq#iefix') format('embedded-opentype'),
+    url('fonts/canvasrama.ttf?4sxejq') format('truetype'),
+    url('fonts/canvasrama.woff?4sxejq') format('woff'),
+    url('fonts/canvasrama.svg?4sxejq#canvasrama') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+i {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'canvasrama' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-triangle:before {
+  content: "\e900";
+}
+.icon-enlarge:before {
+  content: "\e989";
+}
+.icon-shrink:before {
+  content: "\e98a";
+}
+.icon-settings:before {
+  content: "\e994";
+}
+.icon-power:before {
+  content: "\e9b6";
+}
+.icon-download:before {
+  content: "\e9c7";
+}
+.icon-cross:before {
+  content: "\ea0f";
+}
+.icon-play:before {
+  content: "\ea1c";
+}
+.icon-pause:before {
+  content: "\ea1d";
+}
+.icon-up:before {
+  content: "\ea32";
+}
+.icon-right:before {
+  content: "\ea34";
+}
+.icon-down:before {
+  content: "\ea36";
+}
+.icon-left:before {
+  content: "\ea38";
+}
+.icon-square:before {
+  content: "\ea53";
+}
+.icon-circle:before {
+  content: "\ea56";
+}

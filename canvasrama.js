@@ -1,4 +1,4 @@
-const canvas = document.querySelector('#game')
+const canvas = document.querySelector('canvas')
 const ctx = canvas.getContext('2d')
 
 const Game = {
@@ -232,4 +232,8 @@ ctx.drawText = (text, x, y, style) => {
     ctx.fillStyle = style.color
 
     ctx.fillText(text, x, y, style.maxWidth)
+}
+
+function buttonClick(key) {
+    window.navigator.vibrate(50)
 }
