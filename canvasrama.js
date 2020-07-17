@@ -235,5 +235,5 @@ ctx.drawText = (text, x, y, style) => {
 }
 
 function buttonClick(key) {
-    window.navigator.vibrate(50)
+    window.navigator.vibrate(40)
 }

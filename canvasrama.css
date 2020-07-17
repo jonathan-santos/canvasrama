@@ -1,18 +1,27 @@
 :root {
     --main-color: #23B2EE;
     --border-color: #14688b;
+
     --button-color: #CCCCCC;
-    --pressed-button-color: #AAAAAA;
+    --button-pressed-color: #8b8914;
+    --button-border-color: #AAAAAA;
     --button-text-color: #333333;
+    --button-pressed-text-color: #CCCCCC;
+
     --background-color: #EEEEEE;
-    --button-border: 3px solid var(--pressed-button-color);
-    --arrow-button-border-radius: 25px;
+    --button-border: 3px solid var(--button-border-color);
+    --direction-button-border-radius: 25px;
+    --arrow-button-size: 1.8rem;
 }
 
 html, body {
     margin: 0;
     padding: 0;
     background-color: var(--background-color);
+}
+
+body {
+    padding: 1rem;
 }
 
 .canvasrama {
@@ -23,20 +32,18 @@ html, body {
     background-color: var(--main-color);
     display: grid;
     grid-template-columns: 4rem 4rem 4rem 2rem auto 4rem 4rem 4rem;
-    grid-template-rows: 40% 4rem 4rem 4rem auto;
+    grid-template-rows: 15% 15% 4rem 4rem 4rem auto 15%;
 }
-
-    .canvasrama.full-screen {
-        height: 100vh;
-    }
 
 .canvasrama canvas {
     grid-column: 5;
-    grid-row-start: 1;
+    grid-row-start: 2;
     grid-row-end: 7;
     align-self: center;
+    justify-self: center;
     box-sizing: border-box;
     max-width: 100%;
+    max-height: 100%;
     border: 2px solid var(--border-color);
     background-color: #fff;
 }
@@ -46,48 +53,50 @@ html, body {
     border: 0;
     box-sizing: border-box;
     background-color: var(--button-color);
-    border: var(--button-border);
+    border: var(--button-border-color);
     font-size: 2.5rem;
     color: var(--button-text-color);
     line-height: 4rem;
+    outline: none;
 }
 
     .canvasrama .up {
         grid-column: 2;
-        grid-row: 2;
+        grid-row: 3;
         border-bottom: 0;
-        border-top-left-radius: var(--arrow-button-border-radius);
-        border-top-right-radius: var(--arrow-button-border-radius);
+        border-top-left-radius: var(--direction-button-border-radius);
+        border-top-right-radius: var(--direction-button-border-radius);
     }
 
     .canvasrama .right {
         grid-column: 3;
-        grid-row: 3;
+        grid-row: 4;
         border-left: 0;
-        border-top-right-radius: var(--arrow-button-border-radius);
-        border-bottom-right-radius: var(--arrow-button-border-radius);
+        border-top-right-radius: var(--direction-button-border-radius);
+        border-bottom-right-radius: var(--direction-button-border-radius);
     }
 
     .canvasrama .down {
         grid-column: 2;
-        grid-row: 4;
+        grid-row: 5;
         border-top: 0;
-        border-bottom-left-radius: var(--arrow-button-border-radius);
-        border-bottom-right-radius: var(--arrow-button-border-radius);
+        border-bottom-left-radius: var(--direction-button-border-radius);
+        border-bottom-right-radius: var(--direction-button-border-radius);
     }
 
     .canvasrama .left {
         grid-column: 1;
-        grid-row: 3;
+        grid-row: 4;
         border-right: 0;
-        border-top-left-radius: var(--arrow-button-border-radius);
-        border-bottom-left-radius: var(--arrow-button-border-radius);
+        border-top-left-radius: var(--direction-button-border-radius);
+        border-bottom-left-radius: var(--direction-button-border-radius);
     }
 
     .canvasrama .circle, .canvasrama .square {
+        border: 0.5rem solid var(--button-border-color);
         width: 5rem;
         height: 5rem;
-        line-height: 5rem;
+        line-height: 4.5rem;
         align-self: center;
         justify-self: center;
         border-radius: 100%;
@@ -95,34 +104,33 @@ html, body {
 
     .canvasrama .circle {
         grid-column: 6 / span 2;
-        grid-row: 3 / span 2;
+        grid-row: 4 / span 2;
     }
 
     .canvasrama .square {
         grid-column: 7   / span 2;
-        grid-row: 2  / span 2;
+        grid-row: 3  / span 2;
+        font-size: 2.3rem;
     }
 
     .canvasrama .center {
         border: 0;
         grid-column: 2;
-        grid-row: 3;    
-        width: 4rem;
-        height: 4rem;      
-        background-color: var(--pressed-button-color);
+        grid-row: 4;     
+        background-color: var(--button-border-color);
     }
 
     .canvasrama .arrow {
         position: absolute;
         width: 0; 
         height: 0; 
-        border: 1.8rem solid var(--button-color);
+        border: var(--arrow-button-size) solid var(--button-color);
         z-index: 1;
     }
 
         .canvasrama .arrow.arrow-button-up {
             left: 0;
-            bottom: -1.8rem;
+            bottom: calc(var(--arrow-button-size) * -1);
             border-bottom: 0;
             border-left-color: transparent;
             border-right-color: transparent;
@@ -130,14 +138,14 @@ html, body {
 
         .canvasrama  .arrow.arrow-button-right {
             top: 0;
-            left: -1.8rem;
+            left: calc(var(--arrow-button-size) * -1);
             border-left: 0;
             border-top-color: transparent;
             border-bottom-color: transparent; 
         }
 
         .canvasrama .arrow.arrow-button-down {
-            top: -1.8rem;
+            top: calc(var(--arrow-button-size) * -1);
             left: 0;
             border-top: 0;
             border-left-color: transparent;
@@ -146,31 +154,90 @@ html, body {
             
         .canvasrama .arrow.arrow-button-left {
             top: 0;
-            right: -1.8rem;
+            right: calc(var(--arrow-button-size) * -1);
             border-right: 0;
             border-top-color: transparent;
             border-bottom-color: transparent;
         }
 
-    .canvasrama button:active {
-        background-color: var(--pressed-button-color);
+    .canvasrama button:active, .canvasrama button:hover {
+        background-color: var(--button-pressed-color);
+        color: var(--button-pressed-text-color)
     }
 
-        .canvasrama .up:active .arrow.arrow-button-up {
-            border-top-color: var(--pressed-button-color);
+        .canvasrama .up:active .arrow.arrow-button-up, .canvasrama .up:hover .arrow.arrow-button-up {
+            border-top-color: var(--button-pressed-color);
         }
 
-        .canvasrama .right:active .arrow.arrow-button-right {
-            border-right-color: var(--pressed-button-color);
+        .canvasrama .right:active .arrow.arrow-button-right, .canvasrama .right:hover .arrow.arrow-button-right {
+            border-right-color: var(--button-pressed-color);
         }
 
-        .canvasrama .down:active .arrow.arrow-button-down {
-            border-bottom-color: var(--pressed-button-color);
+        .canvasrama .down:active .arrow.arrow-button-down, .canvasrama .down:hover .arrow.arrow-button-down {
+            border-bottom-color: var(--button-pressed-color);
         }
 
-        .canvasrama .left:active .arrow.arrow-button-left {
-            border-left-color: var(--pressed-button-color);
+        .canvasrama .left:active .arrow.arrow-button-left, .canvasrama .left:hover .arrow.arrow-button-left {
+            border-left-color: var(--button-pressed-color);
         }
+
+/* #region media queries */
+@media (max-width: 768px) {
+    :root {
+        --arrow-button-size: 1.575rem;
+    }
+    .canvasrama {
+        grid-template-columns: 3.5rem 3.5rem 3.5rem auto 3rem 3rem 3rem;
+        grid-template-rows: auto 3.5rem 3.5rem 3.5rem 3.5rem 3.5rem;
+    }
+
+        .canvasrama canvas {
+            grid-column: 1 / span 8;
+            grid-row: 1;
+        }
+
+        .canvasrama button {
+            line-height: 3.5rem;
+        }
+
+        .canvasrama .up {
+            grid-column: 2;
+            grid-row: 3;
+        }
+
+        .canvasrama .right {
+            grid-column: 3;
+            grid-row: 4;
+        }
+
+        .canvasrama .down {
+            grid-column: 2;
+            grid-row: 5;
+        }
+
+        .canvasrama .left {
+            grid-column: 1;
+            grid-row: 4;
+        }
+
+        .canvasrama .center {
+            grid-column: 2;
+            grid-row: 4;
+        }
+
+        .canvasrama .square {
+            grid-column: 5 / span 2;
+            grid-row: 4 / span 2;
+            justify-self: start;
+        }
+
+        .canvasrama .circle {
+            grid-column: 6 / span 2;
+            grid-row: 3 / span 2;
+            justify-self: end;
+        }
+}
+/* #endregion */
 
 /* #region  */
 @font-face {
