@@ -20,10 +20,6 @@ html, body {
     background-color: var(--background-color);
 }
 
-body {
-    padding: 1rem;
-}
-
 .canvasrama {
     border: 2px solid var(--border-color);
     border-radius: 25px;
@@ -35,7 +31,7 @@ body {
     grid-template-rows: 15% 15% 4rem 4rem 4rem auto 15%;
 }
 
-.canvasrama canvas {
+canvas {
     grid-column: 5;
     grid-row-start: 2;
     grid-row-end: 7;
