@@ -1,17 +1,25 @@
 :root {
     --main-color: #23B2EE;
     --border-color: #14688b;
-
-    --button-color: #CCCCCC;
-    --button-pressed-color: #8b8914;
-    --button-border-color: #AAAAAA;
-    --button-text-color: #333333;
-    --button-pressed-text-color: #CCCCCC;
-
     --background-color: #EEEEEE;
-    --button-border: 3px solid var(--button-border-color);
-    --direction-button-border-radius: 25px;
-    --arrow-button-size: 1.8rem;
+
+    --button-background-color: #CCCCCC;
+    --button-text-color: #333333;
+    --button-border-color: #AAAAAA;
+    
+    --button-pressed-color: #0f4e69;
+    --button-pressed-text-color: #CCCCCC;
+    
+    --move-button-size: 1.8rem;
+    --move-button-border-radius: 25px;
+    --move-button-border: 3px solid var(--button-border-color);
+
+    --action-button-size: 5rem;
+    --action-button-border: 0.5rem solid var(--button-border-color);
+}
+
+* {
+    box-sizing: border-box;
 }
 
 html, body {
@@ -21,221 +29,198 @@ html, body {
 }
 
 .canvasrama {
+    display: grid;
+    grid-template-columns: 3rem 3rem 3rem auto 2.75rem 2.75rem 2.75rem 0;
+    grid-template-rows: 11rem 1rem 3rem 3rem 3rem 2rem;
     border: 2px solid var(--border-color);
     border-radius: 25px;
-    box-sizing: border-box;
     padding: 1rem;
     background-color: var(--main-color);
-    display: grid;
-    grid-template-columns: 4rem 4rem 4rem 2rem auto 4rem 4rem 4rem;
-    grid-template-rows: 15% 15% 4rem 4rem 4rem auto 15%;
+    overflow: hidden;
 }
 
 canvas {
-    grid-column: 5;
-    grid-row-start: 2;
-    grid-row-end: 7;
-    align-self: center;
-    justify-self: center;
-    box-sizing: border-box;
+    grid-column: 1 / span 7;
+    grid-row: 1;
     max-width: 100%;
     max-height: 100%;
     border: 2px solid var(--border-color);
     background-color: #fff;
+    align-self: center;
+    justify-self: center;
 }
 
+/* #region buttons */
 .canvasrama button {
-    position: relative;
-    border: 0;
-    box-sizing: border-box;
-    background-color: var(--button-color);
-    border: var(--button-border-color);
-    font-size: 2.5rem;
+    background-color: var(--button-background-color);
     color: var(--button-text-color);
-    line-height: 4rem;
     outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-    .canvasrama .up {
-        grid-column: 2;
-        grid-row: 3;
-        border-bottom: 0;
-        border-top-left-radius: var(--direction-button-border-radius);
-        border-top-right-radius: var(--direction-button-border-radius);
+    .canvasrama .move {
+        position: relative;
+        border: var(--move-button-border);
+        font-size: calc(var(--move-button-size) * 1.4)
     }
-
-    .canvasrama .right {
-        grid-column: 3;
-        grid-row: 4;
-        border-left: 0;
-        border-top-right-radius: var(--direction-button-border-radius);
-        border-bottom-right-radius: var(--direction-button-border-radius);
-    }
-
-    .canvasrama .down {
-        grid-column: 2;
-        grid-row: 5;
-        border-top: 0;
-        border-bottom-left-radius: var(--direction-button-border-radius);
-        border-bottom-right-radius: var(--direction-button-border-radius);
-    }
-
-    .canvasrama .left {
-        grid-column: 1;
-        grid-row: 4;
-        border-right: 0;
-        border-top-left-radius: var(--direction-button-border-radius);
-        border-bottom-left-radius: var(--direction-button-border-radius);
-    }
-
-    .canvasrama .circle, .canvasrama .square {
-        border: 0.5rem solid var(--button-border-color);
-        width: 5rem;
-        height: 5rem;
-        line-height: 4.5rem;
-        align-self: center;
-        justify-self: center;
-        border-radius: 100%;
-    }
-
-    .canvasrama .circle {
-        grid-column: 6 / span 2;
-        grid-row: 4 / span 2;
-    }
-
-    .canvasrama .square {
-        grid-column: 7   / span 2;
-        grid-row: 3  / span 2;
-        font-size: 2.3rem;
-    }
-
-    .canvasrama .center {
-        border: 0;
-        grid-column: 2;
-        grid-row: 4;     
-        background-color: var(--button-border-color);
-    }
-
-    .canvasrama .arrow {
-        position: absolute;
-        width: 0; 
-        height: 0; 
-        border: var(--arrow-button-size) solid var(--button-color);
-        z-index: 1;
-    }
-
-        .canvasrama .arrow.arrow-button-up {
-            left: 0;
-            bottom: calc(var(--arrow-button-size) * -1);
-            border-bottom: 0;
-            border-left-color: transparent;
-            border-right-color: transparent;
-        }
-
-        .canvasrama  .arrow.arrow-button-right {
-            top: 0;
-            left: calc(var(--arrow-button-size) * -1);
-            border-left: 0;
-            border-top-color: transparent;
-            border-bottom-color: transparent; 
-        }
-
-        .canvasrama .arrow.arrow-button-down {
-            top: calc(var(--arrow-button-size) * -1);
-            left: 0;
-            border-top: 0;
-            border-left-color: transparent;
-            border-right-color: transparent;
-        }
-            
-        .canvasrama .arrow.arrow-button-left {
-            top: 0;
-            right: calc(var(--arrow-button-size) * -1);
-            border-right: 0;
-            border-top-color: transparent;
-            border-bottom-color: transparent;
-        }
-
-    .canvasrama button:active, .canvasrama button:hover {
-        background-color: var(--button-pressed-color);
-        color: var(--button-pressed-text-color)
-    }
-
-        .canvasrama .up:active .arrow.arrow-button-up, .canvasrama .up:hover .arrow.arrow-button-up {
-            border-top-color: var(--button-pressed-color);
-        }
-
-        .canvasrama .right:active .arrow.arrow-button-right, .canvasrama .right:hover .arrow.arrow-button-right {
-            border-right-color: var(--button-pressed-color);
-        }
-
-        .canvasrama .down:active .arrow.arrow-button-down, .canvasrama .down:hover .arrow.arrow-button-down {
-            border-bottom-color: var(--button-pressed-color);
-        }
-
-        .canvasrama .left:active .arrow.arrow-button-left, .canvasrama .left:hover .arrow.arrow-button-left {
-            border-left-color: var(--button-pressed-color);
-        }
-
-/* #region media queries */
-@media (max-width: 768px) {
-    :root {
-        --arrow-button-size: 1.575rem;
-    }
-    .canvasrama {
-        grid-template-columns: 3.5rem 3.5rem 3.5rem auto 3rem 3rem 3rem;
-        grid-template-rows: auto 3.5rem 3.5rem 3.5rem 3.5rem 3.5rem;
-    }
-
-        .canvasrama canvas {
-            grid-column: 1 / span 8;
-            grid-row: 1;
-        }
-
-        .canvasrama button {
-            line-height: 3.5rem;
-        }
 
         .canvasrama .up {
             grid-column: 2;
             grid-row: 3;
+            border-bottom: 0;
+            border-top-left-radius: var(--move-button-border-radius);
+            border-top-right-radius: var(--move-button-border-radius);
         }
 
         .canvasrama .right {
             grid-column: 3;
             grid-row: 4;
+            border-left: 0;
+            border-top-right-radius: var(--move-button-border-radius);
+            border-bottom-right-radius: var(--move-button-border-radius);
         }
 
         .canvasrama .down {
             grid-column: 2;
             grid-row: 5;
+            border-top: 0;
+            border-bottom-left-radius: var(--move-button-border-radius);
+            border-bottom-right-radius: var(--move-button-border-radius);
         }
 
         .canvasrama .left {
             grid-column: 1;
             grid-row: 4;
+            border-right: 0;
+            border-top-left-radius: var(--move-button-border-radius);
+            border-bottom-left-radius: var(--move-button-border-radius);
         }
 
-        .canvasrama .center {
-            grid-column: 2;
-            grid-row: 4;
+    .canvasrama .action {
+        width: var(--action-button-size);
+        height: var(--action-button-size);
+        border: var(--action-button-border);
+        border-radius: 100%;
+        align-self: center;
+        font-size: calc(var(--action-button-size) * 0.45);
+    }
+
+        .canvasrama .circle {
+            justify-self: start;
+            grid-column: 5 / span 2;
+            grid-row: 4 / span 2;
         }
 
         .canvasrama .square {
-            grid-column: 5 / span 2;
-            grid-row: 4 / span 2;
-            justify-self: start;
-        }
-
-        .canvasrama .circle {
-            grid-column: 6 / span 2;
-            grid-row: 3 / span 2;
             justify-self: end;
+            grid-column: 6 / span 2;
+            grid-row: 3  / span 2;
         }
+/* #endregion */
+
+/* #region buttons::pressed */
+.canvasrama button:active, .canvasrama button:hover {
+    background-color: var(--button-pressed-color);
+    color: var(--button-pressed-text-color)
+}
+
+    .canvasrama .up:active .arrow.arrow-button-up, .canvasrama .up:hover .arrow.arrow-button-up {
+        border-top-color: var(--button-pressed-color);
+    }
+
+    .canvasrama .right:active .arrow.arrow-button-right, .canvasrama .right:hover .arrow.arrow-button-right {
+        border-right-color: var(--button-pressed-color);
+    }
+
+    .canvasrama .down:active .arrow.arrow-button-down, .canvasrama .down:hover .arrow.arrow-button-down {
+        border-bottom-color: var(--button-pressed-color);
+    }
+
+    .canvasrama .left:active .arrow.arrow-button-left, .canvasrama .left:hover .arrow.arrow-button-left {
+        border-left-color: var(--button-pressed-color);
+    }
+/* #endregion */
+
+/* #region arrows */
+.canvasrama .center {
+    border: 0;
+    grid-column: 2;
+    grid-row: 4;     
+    background-color: var(--button-border-color);
+}
+
+.canvasrama .arrow {
+    position: absolute;
+    width: 0; 
+    height: 0; 
+    border: var(--move-button-size) solid var(--button-background-color);
+    z-index: 1;
+}
+
+    .canvasrama .arrow.arrow-button-up {
+        left: 0;
+        bottom: calc(var(--move-button-size) * -1);
+        border-bottom: 0;
+        border-left-color: transparent;
+        border-right-color: transparent;
+    }
+
+    .canvasrama  .arrow.arrow-button-right {
+        top: 0;
+        left: calc(var(--move-button-size) * -1);
+        border-left: 0;
+        border-top-color: transparent;
+        border-bottom-color: transparent; 
+    }
+
+    .canvasrama .arrow.arrow-button-down {
+        top: calc(var(--move-button-size) * -1);
+        left: 0;
+        border-top: 0;
+        border-left-color: transparent;
+        border-right-color: transparent;
+    }
+        
+    .canvasrama .arrow.arrow-button-left {
+        top: 0;
+        right: calc(var(--move-button-size) * -1);
+        border-right: 0;
+        border-top-color: transparent;
+        border-bottom-color: transparent;
+    }
+/* #endregion */
+
+/* #region media queries */
+@media (max-width: 450px) {
+    :root {
+        --move-button-size: 1.6rem;
+        --action-button-size: 5.5rem;
+    }
+
+    .canvasrama {
+        grid-template-columns: 3.5rem 3.5rem 3.5rem auto 3.5rem 3.5rem 3.5rem 0;
+        grid-template-rows: 15rem 1rem 3.5rem 3.5rem 3.5rem 2rem;
+        height: 30rem;
+    }
+}
+
+@media (max-width: 330px) {
+    :root {
+        --move-button-size: 1.3rem;
+        --action-button-size: 4.5rem;
+    }
+
+    .canvasrama {
+        grid-template-columns: 3rem 3rem 3rem auto 2.75rem 2.75rem 2.75rem 0;
+        grid-template-rows: 11rem 1rem 3rem 3rem 3rem 2rem;
+        height: 23rem;
+    }
 }
 /* #endregion */
 
-/* #region  */
+/* #region icomoon  */
 @font-face {
     font-family: 'canvasrama';
     src:  url('./assets/fonts/canvasrama.eot?4sxejq');

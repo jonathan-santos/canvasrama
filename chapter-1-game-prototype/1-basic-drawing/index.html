@@ -8,32 +8,30 @@
 </head>
 <body>
     <div class='canvasrama full-screen'>
-        <button class='up' onpointerdown='buttonClick("up")'>
+        <canvas width='800' height='480'>
+            Your browser doesn't support canvasrama unfortunely :(
+        </canvas>
+        <button class='move up' onpointerdown='buttonClick("up")'>
             <i class="icon-up"></i>
             <span class="arrow arrow-button-up"></span>
         </button>
-        <button class='right' onpointerdown='buttonClick("right")'>
+        <button class='move right' onpointerdown='buttonClick("right")'>
             <i class="icon-right"></i>
             <span class="arrow arrow-button-right"></span>
         </button>
         <div class="center"></div>
-        <button class='down' onpointerdown='buttonClick("down")'>
+        <button class='move down' onpointerdown='buttonClick("down")'>
             <i class="icon-down"></i>
             <span class="arrow arrow-button-down"></span>
         </button>
-        <button class='left' onpointerdown='buttonClick("left")'>
+        <button class='move left' onpointerdown='buttonClick("left")'>
             <i class="icon-left"></i>
             <span class="arrow arrow-button-left"></span>
         </button>
-
-        <canvas width='1280' height='960'>
-            Your browser doesn't support canvasrama unfortunely :(
-        </canvas>
-
-        <button class='square' onpointerdown='buttonClick("square")'>
+        <button class='action square' onpointerdown='buttonClick("square")'>
             <i class='icon-square'></i>
         </button>
-        <button class='circle' onpointerdown='buttonClick("circle")'>
+        <button class='action circle' onpointerdown='buttonClick("circle")'>
             <i class='icon-circle'></i>
         </button>
     </div>
