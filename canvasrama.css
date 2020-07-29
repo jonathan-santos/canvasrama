@@ -3,6 +3,7 @@
     --border-color: #14688b;
     --background-color: #EEEEEE;
 
+    --top-height: 2rem;
     --canvas-height: 11rem;
     --title-height: 1rem;
     --button-size: 2.8rem;
@@ -232,7 +233,7 @@ canvas {
     }
 }
 
-@media (max-width: 1110px) {
+@media (max-width: 1110px) and (orientation: portrait) {
     :root {
         --canvas-height: 35rem;
         --title-height: 2.5rem;
@@ -248,7 +249,7 @@ canvas {
     }
 }
 
-@media (max-width: 800px) {
+@media (max-width: 800px) and (orientation: portrait) {
     :root {
         --canvas-height: 30rem;
         --title-height: 3rem;
@@ -260,7 +261,7 @@ canvas {
     }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 600px) and (orientation: portrait) {
     :root {
         --canvas-height: 20rem;
         --title-height: 1rem;
@@ -272,7 +273,7 @@ canvas {
     }
 }
 
-@media (max-width: 450px) {
+@media (max-width: 450px) and (orientation: portrait) {
     :root {
         --canvas-height: 15rem;
         --title-height: 1rem;
@@ -284,7 +285,7 @@ canvas {
     }
 }
 
-@media (max-width: 380px) {
+@media (max-width: 380px) and (orientation: portrait) {
     :root {
         --canvas-height: 15rem;
         --title-height: 1rem;
@@ -316,14 +317,15 @@ canvas {
     }
 
     .canvasrama {
-        grid-template-columns: var(--button-size) var(--button-size) var(--button-size) auto var(--button-size) var(--button-size) var(--button-size) 0;
-        grid-template-rows: var(--canvas-height) var(--title-height) var(--button-size) var(--button-size) var(--button-size) var(--bottom-size);
-        height: calc(var(--canvas-height) + var(--title-height) + (var(--button-size) * 3 ) + var(--bottom-size));
+        grid-template-columns: var(--button-size) var(--button-size) var(--button-size) var(--canvas-padding) auto var(--canvas-padding) var(--button-size) var(--button-size) var(--button-size) 0;
+        grid-template-rows: var(--top-height) auto var(--button-size) var(--button-size) var(--button-size) auto var(--bottom-size);
+        height: 100vh;
+        padding: 0.25rem;
     }
 
     canvas {
-        grid-column: 1 / span 7;
-        grid-row: 1;
+        grid-column: 5;
+        grid-row: 1 / 8;
     }
 
     .canvasrama .up {
@@ -347,18 +349,70 @@ canvas {
     }
 
     .canvasrama .circle {
-        grid-column: 5 / span 2;
+        grid-column: 7 / span 2;
         grid-row: 4 / span 2;
     }
 
     .canvasrama .square {
-        grid-column: 6 / span 2;
+        grid-column: 8 / span 2;
         grid-row: 3  / span 2;
     }
 
     .canvasrama .center {
         grid-column: 2;
         grid-row: 4; 
+    }
+}
+
+@media (max-height: 1110px) and (orientation: landscape) {
+    :root {
+        --top-height: 1rem;
+        --canvas-padding: 0.5rem;
+        --button-size: 4.5rem;
+        --bottom-size: 1rem;
+
+        --move-button-size: 2.1rem;
+        --action-button-size: 7rem;
+    }
+
+    canvas {
+        width: 960px;
+    }
+}
+
+@media (max-height: 800px) and (orientation: landscape) {
+    :root {
+        --top-height: 1rem;
+        --canvas-padding: 0.5rem;
+        --button-size: 3.5rem;
+        --bottom-size: 1rem;
+
+        --move-button-size: 1.55rem;
+        --action-button-size: 5.5rem;
+    }
+}
+
+@media (max-height: 420px) and (orientation: landscape) {
+    :root {
+        --top-height: 1rem;
+        --canvas-padding: 0.5rem;
+        --button-size: 2.75rem;
+        --bottom-size: 1rem;
+
+        --move-button-size: 1.2rem;
+        --action-button-size: 4rem;
+    }
+}
+
+@media (max-height: 330px) and (orientation: landscape) {
+    :root {
+        --top-height: 1rem;
+        --canvas-padding: 0.5rem;
+        --button-size: 2.5rem;
+        --bottom-size: 1rem;
+
+        --move-button-size: 1.05rem;
+        --action-button-size: 4rem;
     }
 }
 /* #endregion */
