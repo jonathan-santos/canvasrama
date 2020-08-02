@@ -24,10 +24,10 @@ const animacaoScene = {
         ctx.fillStyle = '#ff0'
     
         // Filled box
-        ctx.fillRect(250, 180, 200 - this.count, 200 - this.count)
+        ctx.fillRect(100, 180, 200 - this.count, 200 - this.count)
     
         // Filled circle
-        ctx.drawOval(700, 520, 200 - this.count)
+        ctx.drawOval(590, 390, 200 - this.count)
     
         // Text
         ctx.fillStyle = '#f00'

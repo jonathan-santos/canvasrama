@@ -18,10 +18,10 @@ ctx.drawLine(0, canvas.height / 2, canvas.width, canvas.height / 2)
 ctx.fillStyle = '#ff0'
 
 // Filled Box
-ctx.fillRect(250, 180, 200, 200)
+ctx.fillRect(100, 180, 200, 200)
 
 // Filled Circle
-ctx.drawOval(700, 520, 200)
+ctx.drawOval(590, 390, 200)
 
 // Text
 ctx.fillStyle = '#f00'

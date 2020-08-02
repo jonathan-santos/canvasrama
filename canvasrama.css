@@ -182,10 +182,6 @@ canvas {
 
 /* #region media queries portrait */
 @media (orientation: portrait) {
-    html, body {
-        background-color: red;
-    }
-
     .canvasrama {
         grid-template-columns: var(--button-size) var(--button-size) var(--button-size) auto var(--button-size) var(--button-size) var(--button-size) 0;
         grid-template-rows: var(--canvas-height) var(--title-height) var(--button-size) var(--button-size) var(--button-size) var(--bottom-size);
@@ -235,11 +231,12 @@ canvas {
 
 @media (max-width: 1110px) and (orientation: portrait) {
     :root {
-        --canvas-height: 35rem;
+        --canvas-height: 50rem;
         --title-height: 2.5rem;
         --button-size: 8rem;
         --bottom-size: 3rem;
 
+        --move-button-border-radius: 75px;
         --move-button-size: 3.8rem;
         --action-button-size: 12rem;
     }
@@ -251,11 +248,12 @@ canvas {
 
 @media (max-width: 800px) and (orientation: portrait) {
     :root {
-        --canvas-height: 30rem;
+        --canvas-height: 35rem;
         --title-height: 3rem;
         --button-size: 6rem;
         --bottom-size: 3rem;
 
+        --move-button-border-radius: 50px;
         --move-button-size: 2.85rem;
         --action-button-size: 9rem;
     }
@@ -275,7 +273,7 @@ canvas {
 
 @media (max-width: 450px) and (orientation: portrait) {
     :root {
-        --canvas-height: 15rem;
+        --canvas-height: 20rem;
         --title-height: 1rem;
         --button-size: 3.5rem;
         --bottom-size: 2rem;
@@ -287,24 +285,24 @@ canvas {
 
 @media (max-width: 380px) and (orientation: portrait) {
     :root {
-        --canvas-height: 15rem;
+        --canvas-height: 17rem;
         --title-height: 1rem;
         --button-size: 3.25rem;
         --bottom-size: 2rem;
 
-        --move-button-size: 1.55rem;
+        --move-button-size: 1.4rem;
         --action-button-size: 5.25rem;
     }
 }
 
-@media (max-width: 330px) {
+@media (max-width: 330px) and (orientation: portrait) {
     :root {
-        --canvas-height: 11rem;
+        --canvas-height: 14rem;
         --title-height: 1rem;
         --button-size: 2.8rem;
         --bottom-size: 2rem;
 
-        --move-button-size: 1.3rem;
+        --move-button-size: 1.2rem;
         --action-button-size: 4.5rem;
     }
 }
@@ -312,10 +310,6 @@ canvas {
 
 /* #region media queries landscape */
 @media (orientation: landscape) {
-    html, body {
-        background-color: blue;
-    }
-
     .canvasrama {
         grid-template-columns: var(--button-size) var(--button-size) var(--button-size) var(--canvas-padding) auto var(--canvas-padding) var(--button-size) var(--button-size) var(--button-size) 0;
         grid-template-rows: var(--top-height) auto var(--button-size) var(--button-size) var(--button-size) auto var(--bottom-size);
@@ -361,6 +355,22 @@ canvas {
     .canvasrama .center {
         grid-column: 2;
         grid-row: 4; 
+    }
+}
+
+@media (min-height: 1110px) and (orientation: landscape) {
+    :root {
+        --top-height: 1rem;
+        --canvas-padding: 0.5rem;
+        --button-size: 4.5rem;
+        --bottom-size: 1rem;
+
+        --move-button-size: 2.1rem;
+        --action-button-size: 7rem;
+    }
+
+    canvas {
+        width: 960px;
     }
 }
 

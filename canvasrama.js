@@ -1,5 +1,6 @@
 const canvas = document.querySelector('canvas')
 const ctx = canvas.getContext('2d')
+configureCanvasrama()
 
 const Game = {
     currentScene: null,
@@ -232,6 +233,42 @@ ctx.drawText = (text, x, y, style) => {
     ctx.fillStyle = style.color
 
     ctx.fillText(text, x, y, style.maxWidth)
+}
+
+function configureCanvasrama() {
+    canvas.width = 800
+    canvas.height = 600
+    canvas.innerHTML = 'Unfortunely your Browser doesn\'t support canvas :('
+
+    const createButtons = () => {
+        const canvasrama = document.querySelector('.canvasrama')
+    
+        const createButton = (type, name) => {
+            const button = document.createElement('button')
+            button.className = `${type} ${name}`
+            button.onpointerdown = (e) => buttonClick('up')
+            button.innerHTML += `<i class='icon-${name}'></i>`
+            if (type == 'move')
+                button.innerHTML += `<span class='arrow arrow-button-${name}'></span>`
+            canvasrama.appendChild(button)
+        }
+    
+        const createCenter = () => {
+            const center = document.createElement('div')
+            center.className = 'center'
+            canvasrama.appendChild(center)
+        }
+    
+        createButton('move', 'up')
+        createButton('move', 'right')
+        createButton('move', 'down')
+        createButton('move', 'left')
+        createButton('action', 'circle')
+        createButton('action', 'square')
+        createCenter()
+    }
+
+    createButtons()
 }
 
 function buttonClick(key) {
