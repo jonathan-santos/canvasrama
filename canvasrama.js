@@ -1,6 +1,5 @@
 const canvas = document.querySelector('canvas')
 const ctx = canvas.getContext('2d')
-configureCanvasrama()
 
 const Game = {
     currentScene: null,
@@ -28,10 +27,15 @@ const Game = {
         if(scene.update != null) {
             scene.update.bind(scene)
             scene.loopID = setInterval(
-                handler = () => scene.update(),
+                handler = () => this.mainLoop(scene),
                 timeout = fps
             )
         }
+    },
+
+    mainLoop: (scene) => {
+        scene.update()
+        Game.input.resetPressedEvents()
     },
 
     newElement: (params) => {
@@ -59,57 +63,44 @@ const Game = {
         return element
     },
 
-    removeInputEvents: (inputEvents) => {
-        if(!inputEvents)
-            return
+    input: {
+        buttons: [
+            { type: 'move', name: 'up', keys: ['w', 'ArrowUp'], state: 'idle', element: null },
+            { type: 'move', name: 'right', keys: ['d', 'ArrowRight'], state: 'idle', element: null },
+            { type: 'move', name: 'down', keys: ['s', 'ArrowDown'], state: 'idle', element: null },
+            { type: 'move', name: 'left', keys: ['a', 'ArrowLeft'], state: 'idle', element: null },
+            { type: 'action', name: 'circle', keys: ['j', ' '], state: 'idle', element: null },
+            { type: 'action', name: 'square', keys: ['k'], state: 'idle', element: null }
+        ],
 
-        inputEvents.map(inputEvent => {
-            document.removeEventListener(inputEvent.event, inputEvent.eventHandler)
-        })
-    },
-
-    registerInputEvents: (inputEvents) => {
-        if(!inputEvents)
-            return
-
-        const createEventListener = (inputEvent) => {
-            inputEvent.eventHandler = (eventParam) => {
-                handleInputEventValues(inputEvent, eventParam)
-            }
-
-            document.addEventListener(inputEvent.event, inputEvent.eventHandler)
-        }
-
-        const handleInputEventValues = (inputEvent, eventParam) => {
-            inputEvent.values.map((inputEventValue) => {
-                if(inputEvent.eventType == 'keyboard') {
-                    handleKeyboardInput(inputEventValue, eventParam)
-                } else if(inputEvent.eventType == 'mouse') {
-                    handleMouseInput(inputEventValue, eventParam)
-                }    
+        findButton: (test, callback) => {
+            Game.input.buttons.forEach(button => {
+                if (test(button)) {
+                    callback(button)
+                }
             })
-        }
+        },
 
-        const handleKeyboardInput = (inputEventValue, eventParam) => {
-            if(eventParam.key == inputEventValue.key)
-                inputEventValue.action(eventParam)
-        }
-
-        const handleMouseInput = (inputEventValue, eventParam) => {
-            const canvasRect = canvas.getBoundingClientRect()
-            const mousePos = {
-                x: Math.floor(eventParam.clientX - canvasRect.left),
-                y: Math.floor(eventParam.clientY - canvasRect.top)
-            }
-
-            const mousePosElement = Game.newElement({ pos: mousePos })
-            if(!inputEventValue.canGetOutOfViewport && Game.utils.isElementOutOfViewport(mousePosElement))
-                return
-
-            inputEventValue.action(eventParam, mousePos)
-        }
+        resetPressedEvents: () => {
+            Game.input.buttons.forEach(button => {
+                if (button.state == 'pressed') {
+                    button.state = 'idle'
+                }
+            })
+            Game.input.clickPosition = null
+        },
         
-        inputEvents.map(inputEvent => createEventListener(inputEvent))
+        isButtonDown: (buttonName) => {
+            const button = Game.input.buttons.find(b => b.name == buttonName)
+            return button && button.state === 'down'
+        },
+
+        isButtonPressed: (buttonName) => {
+            const button = Game.input.buttons.find(b => b.name == buttonName)
+            return button && button.state === 'pressed'
+        },
+
+        getClick: null
     },
 
     utils: {
@@ -173,88 +164,95 @@ const Game = {
     }
 }
 
-ctx.clear = () => {
-    ctx.clearRect(0, 0, canvas.width, canvas.height)
-}
-
-ctx.drawBackdrop = (opacity) => {
-    ctx.fillStyle = `rgb(0, 0, 0, ${opacity})`
-    ctx.fillRect(0, 0, canvas.width, canvas.height)
-}
-
-ctx.drawButton = (x, y, width, height, text, style) => {
-    style = {
-        borderColor: '#333',
-        backgroundColor: '#eee',
-        color: '#333',
-        font: '20px serif',
-        ...style
-    }
-
-    ctx.strokeStyle = style.borderColor
-    ctx.fillStyle = style.backgroundColor
-
-    ctx.strokeRect(x, y, width, height)
-    ctx.fillRect(x + 1, y + 1, width - 1, height - 1)
-
-    ctx.fillStyle = style.color
-    ctx.font = style.font
-
-    const textPositionX = x + (width / 2) - (text.length * 4)
-    ctx.fillText(text, textPositionX, y + height / 2 + 5)
-}
-
-ctx.drawOval = (x, y, size, fill = true) => {
-    if(size < 0)
-        size = 0
-
-    ctx.beginPath()
-    ctx.arc(x, y, size, 0, Math.PI * 2, false)
-
-    if(fill)
-        ctx.fill()
-    else
-        ctx.stroke()
-}
-
-ctx.drawLine = (x, y, endX, endY, color = '#333') => {
-    ctx.strokeStyle = color
-
-    ctx.beginPath()
-    ctx.moveTo(x, y)
-    ctx.lineTo(endX, endY)
-    ctx.stroke()
-}
-
-ctx.drawText = (text, x, y, style) => {
-    style = {
-        color: '#333',
-        font: '20px serif',
-        ...style
-    }
-
-    ctx.font = style.font
-    ctx.fillStyle = style.color
-
-    ctx.fillText(text, x, y, style.maxWidth)
-}
-
 function configureCanvasrama() {
     canvas.width = 800
     canvas.height = 600
     canvas.innerHTML = 'Unfortunely your Browser doesn\'t support canvas :('
 
-    const createButtons = () => {
+    extendCtxFunctions()
+    createButtons()
+    registerInputEvents()
+
+    function extendCtxFunctions() {
+        ctx.clear = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+        }
+        
+        ctx.drawBackdrop = (opacity) => {
+            ctx.fillStyle = `rgb(0, 0, 0, ${opacity})`
+            ctx.fillRect(0, 0, canvas.width, canvas.height)
+        }
+        
+        ctx.drawButton = (x, y, width, height, text, style) => {
+            style = {
+                borderColor: '#333',
+                backgroundColor: '#eee',
+                color: '#333',
+                font: '20px serif',
+                ...style
+            }
+        
+            ctx.strokeStyle = style.borderColor
+            ctx.fillStyle = style.backgroundColor
+        
+            ctx.strokeRect(x, y, width, height)
+            ctx.fillRect(x + 1, y + 1, width - 1, height - 1)
+        
+            ctx.fillStyle = style.color
+            ctx.font = style.font
+        
+            const textPositionX = x + (width / 2) - (text.length * 4)
+            ctx.fillText(text, textPositionX, y + height / 2 + 5)
+        }
+        
+        ctx.drawOval = (x, y, size, fill = true) => {
+            if(size < 0)
+                size = 0
+        
+            ctx.beginPath()
+            ctx.arc(x, y, size, 0, Math.PI * 2, false)
+        
+            if(fill)
+                ctx.fill()
+            else
+                ctx.stroke()
+        }
+        
+        ctx.drawLine = (x, y, endX, endY, color = '#333') => {
+            ctx.strokeStyle = color
+        
+            ctx.beginPath()
+            ctx.moveTo(x, y)
+            ctx.lineTo(endX, endY)
+            ctx.stroke()
+        }
+        
+        ctx.drawText = (text, x, y, style) => {
+            style = {
+                color: '#333',
+                font: '20px serif',
+                ...style
+            }
+        
+            ctx.font = style.font
+            ctx.fillStyle = style.color
+        
+            ctx.fillText(text, x, y, style.maxWidth)
+        }
+    }
+
+    function createButtons () {
         const canvasrama = document.querySelector('.canvasrama')
     
-        const createButton = (type, name) => {
-            const button = document.createElement('button')
-            button.className = `${type} ${name}`
-            button.onpointerdown = (e) => buttonClick('up')
-            button.innerHTML += `<i class='icon-${name}'></i>`
-            if (type == 'move')
-                button.innerHTML += `<span class='arrow arrow-button-${name}'></span>`
-            canvasrama.appendChild(button)
+        const createButton = (button) => {
+            const newButton = document.createElement('button')
+            button.element = newButton
+            newButton.className = `${button.type} ${button.name}`
+            newButton.onpointerdown = (e) => buttonClick('up')
+            newButton.innerHTML += `<i class='icon-${button.name}'></i>`
+            if (button.type == 'move')
+                newButton.innerHTML += `<span class='arrow arrow-button-${button.name}'></span>`
+            canvasrama.appendChild(newButton)
         }
     
         const createCenter = () => {
@@ -263,18 +261,45 @@ function configureCanvasrama() {
             canvasrama.appendChild(center)
         }
     
-        createButton('move', 'up')
-        createButton('move', 'right')
-        createButton('move', 'down')
-        createButton('move', 'left')
-        createButton('action', 'circle')
-        createButton('action', 'square')
+        Game.input.buttons.forEach(button => createButton(button))
         createCenter()
     }
 
-    createButtons()
+    function registerInputEvents () {
+        const isButtonPressed = (e, callback) => {
+            Game.input.findButton(
+                (button) => button.keys.find(key => key == e.key),
+                callback
+            )
+        }
+
+        document.addEventListener('keydown', (e) => {
+            isButtonPressed(e, button => {
+                button.element.classList.add('active')
+                button.state = 'down'
+            })
+        })
+
+        document.addEventListener('keyup', (e) => {
+            isButtonPressed(e, button => {
+                button.element.classList.remove('active')
+                button.state = 'pressed'
+            })
+        })
+
+        document.addEventListener('click', (e) => {
+            const canvasRect = canvas.getBoundingClientRect()
+            const clickPos = {
+                x: Math.floor(e.clientX - canvasRect.left),
+                y: Math.floor(e.clientY - canvasRect.top)
+            }
+            Game.input.clickPosition = clickPos
+        })
+    }
 }
 
 function buttonClick(key) {
     window.navigator.vibrate(40)
 }
+
+configureCanvasrama()

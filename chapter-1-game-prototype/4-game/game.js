@@ -53,6 +53,18 @@ const gameScene = {
     update: () => {
         ctx.clear()
 
+        if (Game.input.isButtonDown('right')) {
+            this.player.velocity.x = 1
+        } else if (Game.input.isButtonDown('left')) {
+            this.player.velocity.x = -1
+        } else {
+            this.player.velocity.x = 0
+        }
+
+        if (Game.input.isButtonPressed('circle') || Game.input.clickPosition) {
+            bullet.shoot()
+        }
+
         this.player.pos.x += this.player.velocity.x * this.player.speed
     
         if(this.player.pos.x < 0)
@@ -107,38 +119,7 @@ const gameScene = {
 
     gameOver: () => {
         Game.loadScene(gameOverScene)
-    },
-
-    inputEvents: [
-        {
-            event: 'keydown',
-            eventType: 'keyboard',
-            values: [
-                { key: 'd', action: (e) => this.player.velocity.x = 1 },
-                { key: 'a', action: (e) => this.player.velocity.x = -1 },
-            ]
-        }, {
-            event: 'keyup',
-            eventType: 'keyboard',
-            values: [
-                { key: ' ', action: (e) => bullet.shoot() },
-                { key: 'd', action: (e) => {
-                    if(this.player.velocity.x == 1)
-                        this.player.velocity.x = 0
-                }},
-                { key: 'a', action: (e) => {
-                    if(this.player.velocity.x == -1)
-                        this.player.velocity.x = 0
-                }}
-            ]
-        }, {
-            event: 'click',
-            eventType: 'mouse',
-            values: [
-                { action: (e, mousePos) => bullet.shoot() },
-            ]
-        }
-    ],
+    }
 }
 
 const gameOverScene = {
@@ -167,25 +148,11 @@ const gameOverScene = {
         Game.loadScene(gameScene)
     },
 
-    inputEvents: [
-        {
-            event: 'keyup',
-            eventType: 'keyboard',
-            values: [
-                { key: ' ', action: (e) => gameOverScene.restartGame()}
-            ]
-        },
-        {
-            event: 'click',
-            eventType: 'mouse',
-            values: [
-                { action: (e, mousePos) => {
-                    if(Game.utils.detectCollision(Game.newElement({ pos: mousePos }), this.restartButton))
-                        gameOverScene.restartGame()
-                }}
-            ]
+    update: () => {
+        if (Game.input.isButtonPressed('circle')) {
+            gameOverScene.restartGame()
         }
-    ]
+    }
 }
 
 Game.loadScene(gameScene)
