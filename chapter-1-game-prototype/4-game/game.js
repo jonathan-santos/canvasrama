@@ -12,7 +12,7 @@ const gameScene = {
         this.player = Game.newElement({
             pos: {
                 x: (canvas.width / 2) - 25,
-                y: 640
+                y: 540
             },
             width: 50,
             height: 50,
@@ -26,7 +26,7 @@ const gameScene = {
                 y: player.pos.y
             },
             width: 1,
-            height: -700,
+            height: -600,
             color: 'rgb(200, 0, 0)',
             force: 30,
             shoot: () => {
@@ -39,7 +39,7 @@ const gameScene = {
         for(let i = 0; i < 5; i++) {
             this.enemies.push(Game.newElement({
                 pos: {
-                    x: 90 + (i * 256),
+                    x: 90 + (i * 150),
                     y: -60 - (i * 10)
                 },
                 width: 50,
@@ -51,7 +51,7 @@ const gameScene = {
     },
 
     update: () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        ctx.clear()
 
         this.player.pos.x += this.player.velocity.x * this.player.speed
     
@@ -76,7 +76,7 @@ const gameScene = {
             if(this.gameLost)
                 return
     
-            if(enemy.pos.y + enemy.height >= 700) {
+            if(enemy.pos.y + enemy.height >= canvas.height) {
                 this.gameLost = true
                 return
             }
@@ -93,7 +93,7 @@ const gameScene = {
         })
     
         // Line
-        ctx.drawLine(0, 700, canvas.width, 700)
+        ctx.drawLine(0, 595, canvas.width, 595)
     
         // Controls
         ctx.drawText('Move with the A and S keys and shoot with the space key or right-clicking with the mouse', 10, 20)

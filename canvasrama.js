@@ -173,6 +173,10 @@ const Game = {
     }
 }
 
+ctx.clear = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+}
+
 ctx.drawBackdrop = (opacity) => {
     ctx.fillStyle = `rgb(0, 0, 0, ${opacity})`
     ctx.fillRect(0, 0, canvas.width, canvas.height)

@@ -4,7 +4,7 @@ const animacaoScene = {
     },
 
     update: () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        ctx.clear()
     
         // Not filled box
         ctx.strokeStyle = '#000'

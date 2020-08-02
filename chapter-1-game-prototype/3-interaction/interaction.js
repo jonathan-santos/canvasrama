@@ -34,7 +34,7 @@ const interactionScene = {
 
         Game.utils.changeElementPosInViewport(this.player, newPos)
     
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        ctx.clear()
     
         // Box
         this.player.draw()
