@@ -111,29 +111,24 @@ canvas {
 /* #endregion */
 
 /* #region buttons::pressed */
-.canvasrama button.active,
-.canvasrama button:hover {
+.canvasrama button.active {
     background-color: var(--button-pressed-color);
     color: var(--button-pressed-text-color)
 }
 
-    .canvasrama .up.active .arrow.arrow-button-up,
-    .canvasrama .up:hover .arrow.arrow-button-up {
+    .canvasrama .up.active .arrow.arrow-button-up {
         border-top-color: var(--button-pressed-color);
     }
 
-    .canvasrama .right.active .arrow.arrow-button-right,
-    .canvasrama .right:hover .arrow.arrow-button-right {
+    .canvasrama .right.active .arrow.arrow-button-right {
         border-right-color: var(--button-pressed-color);
     }
 
-    .canvasrama .down.active .arrow.arrow-button-down,
-    .canvasrama .down:hover .arrow.arrow-button-down {
+    .canvasrama .down.active .arrow.arrow-button-down {
         border-bottom-color: var(--button-pressed-color);
     }
 
-    .canvasrama .left.active .arrow.arrow-button-left,
-    .canvasrama .left:hover .arrow.arrow-button-left {
+    .canvasrama .left.active .arrow.arrow-button-left {
         border-left-color: var(--button-pressed-color);
     }
 /* #endregion */

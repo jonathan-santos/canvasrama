@@ -16,9 +16,6 @@ const Game = {
 
         this.currentScene = scene
 
-        Game.registerInputEvents.bind(scene)
-        this.registerInputEvents(scene.inputEvents)
-
         if(scene.start != null) {
             scene.start.bind(scene)
             scene.start()
@@ -38,31 +35,6 @@ const Game = {
         Game.input.resetPressedEvents()
     },
 
-    newElement: (params) => {
-        const element = {
-            pos: { x: 0, y: 0},
-            width: 0,
-            height: 0,
-            enabled: true,
-            speed: 0,
-            velocity: {
-                x: 0,
-                y: 0
-            },
-            color: 'blue',
-            renderer: 'boxColor',
-            draw: function () {
-                if(this.enabled)
-                    Game.renderers[this.renderer](this)
-            },
-            ...params
-        }
-
-        element.draw.bind(element)
-        
-        return element
-    },
-
     input: {
         buttons: [
             { type: 'move', name: 'up', keys: ['w', 'ArrowUp'], state: 'idle', element: null },
@@ -72,6 +44,8 @@ const Game = {
             { type: 'action', name: 'circle', keys: ['j', ' '], state: 'idle', element: null },
             { type: 'action', name: 'square', keys: ['k'], state: 'idle', element: null }
         ],
+
+        clickPosition: null,
 
         findButton: (test, callback) => {
             Game.input.buttons.forEach(button => {
@@ -99,11 +73,34 @@ const Game = {
             const button = Game.input.buttons.find(b => b.name == buttonName)
             return button && button.state === 'pressed'
         },
-
-        getClick: null
     },
 
     utils: {
+        newElement: (params) => {
+            const element = {
+                pos: { x: 0, y: 0},
+                width: 0,
+                height: 0,
+                enabled: true,
+                speed: 0,
+                velocity: {
+                    x: 0,
+                    y: 0
+                },
+                color: 'blue',
+                renderer: 'boxColor',
+                draw: function () {
+                    if(this.enabled)
+                        Game.renderers[this.renderer](this)
+                },
+                ...params
+            }
+    
+            element.draw.bind(element)
+            
+            return element
+        },
+
         detectCollision: (element1, element2) => {
             if(!element1.enabled || !element2.enabled)
                 return false
@@ -246,13 +243,13 @@ function configureCanvasrama() {
     
         const createButton = (button) => {
             const newButton = document.createElement('button')
-            button.element = newButton
             newButton.className = `${button.type} ${button.name}`
-            newButton.onpointerdown = (e) => buttonClick('up')
             newButton.innerHTML += `<i class='icon-${button.name}'></i>`
             if (button.type == 'move')
                 newButton.innerHTML += `<span class='arrow arrow-button-${button.name}'></span>`
             canvasrama.appendChild(newButton)
+
+            button.element = newButton
         }
     
         const createCenter = () => {
@@ -267,39 +264,52 @@ function configureCanvasrama() {
 
     function registerInputEvents () {
         const isButtonPressed = (e, callback) => {
-            Game.input.findButton(
-                (button) => button.keys.find(key => key == e.key),
-                callback
-            )
+            const findButton = (button) =>  button.keys.find(key => key == e.key)
+            Game.input.findButton(findButton, callback)
         }
 
-        document.addEventListener('keydown', (e) => {
-            isButtonPressed(e, button => {
-                button.element.classList.add('active')
-                button.state = 'down'
+        const buttonDown = (button) => {
+            button.element.classList.add('active')
+            button.state = 'down'
+        }
+
+        const buttonUp = (button) => {
+            button.element.classList.remove('active')
+            button.state = 'pressed'
+        }
+        
+        Game.input.buttons.forEach((button) => {
+            button.element.addEventListener('pointerdown', (e) => {
+                window.navigator.vibrate(40)
+                buttonDown(button)
             })
+
+            button.element.addEventListener('pointerup', (e) => {
+                buttonUp(button)
+            })
+
+            button.element.addEventListener('pointercancel', (e) => {
+                buttonUp(button)
+            })
+        })
+
+        document.addEventListener('keydown', (e) => {
+            isButtonPressed(e, (button) => buttonDown(button))
         })
 
         document.addEventListener('keyup', (e) => {
-            isButtonPressed(e, button => {
-                button.element.classList.remove('active')
-                button.state = 'pressed'
-            })
+            isButtonPressed(e, (button) => buttonUp(button))
         })
 
-        document.addEventListener('click', (e) => {
-            const canvasRect = canvas.getBoundingClientRect()
+        canvas.addEventListener('pointerdown', (e) => {
+            const rect = canvas.getBoundingClientRect()
             const clickPos = {
-                x: Math.floor(e.clientX - canvasRect.left),
-                y: Math.floor(e.clientY - canvasRect.top)
+                x: Math.floor(e.clientX - rect.left),
+                y: Math.floor(e.clientY - rect.top)
             }
             Game.input.clickPosition = clickPos
         })
     }
-}
-
-function buttonClick(key) {
-    window.navigator.vibrate(40)
 }
 
 configureCanvasrama()

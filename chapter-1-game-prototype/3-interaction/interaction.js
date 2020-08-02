@@ -4,7 +4,7 @@ const interactionScene = {
 
     start: () => {
         const playerSize = 50
-        this.player = Game.newElement({
+        this.player = Game.utils.newElement({
             pos: {
                 x: (canvas.width / 2) - (playerSize / 2),
                 y: (canvas.height / 2) - (playerSize / 2)
@@ -38,13 +38,9 @@ const interactionScene = {
             this.player.velocity.y = 0
         }
 
-        let newPos = {
+        const newPos = {
             x: this.player.pos.x + this.player.speed * this.player.velocity.x,
             y: this.player.pos.y + this.player.speed * this.player.velocity.y
-        }
-    
-        if(Game.input.clickPosition) {
-            newPos = Game.input.clickPosition
         }
 
         Game.utils.changeElementPosInViewport(this.player, newPos)

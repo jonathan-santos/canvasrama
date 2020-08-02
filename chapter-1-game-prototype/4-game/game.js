@@ -9,7 +9,7 @@ const gameScene = {
         this.score = 0
         this.gameLost = false
 
-        this.player = Game.newElement({
+        this.player = Game.utils.newElement({
             pos: {
                 x: (canvas.width / 2) - 25,
                 y: 540
@@ -19,7 +19,7 @@ const gameScene = {
             speed: 10,
         })
     
-        this.bullet = Game.newElement({
+        this.bullet = Game.utils.newElement({
             enabled: false,
             pos: {
                 x: player.pos.x + (player.width / 2),
@@ -37,7 +37,7 @@ const gameScene = {
         
         this.enemies = []
         for(let i = 0; i < 5; i++) {
-            this.enemies.push(Game.newElement({
+            this.enemies.push(Game.utils.newElement({
                 pos: {
                     x: 90 + (i * 150),
                     y: -60 - (i * 10)
@@ -126,7 +126,7 @@ const gameOverScene = {
     restartButton: null,
 
     start: () => {
-        this.restartButton = Game.newElement({
+        this.restartButton = Game.utils.newElement({
             pos: {
                 x: canvas.width / 2 - 90,
                 y: canvas.height / 2 + 100,
