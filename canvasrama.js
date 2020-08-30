@@ -7,7 +7,7 @@ const Game = {
 
     loadScene: function(scene, fps = 1000 / 30) {
         if(!scene) {
-            return
+            throw new Error('No scene to be loaded')
         }
 
         if(this.currentScene != null) {
@@ -16,13 +16,11 @@ const Game = {
 
         this.currentScene = scene
 
-        if(scene.start != null) {
-            scene.start.bind(scene)
+        if(scene.start) {
             scene.start()
         }
 
-        if(scene.update != null) {
-            scene.update.bind(scene)
+        if(scene.update) {
             scene.loopID = setInterval(
                 handler = () => this.mainLoop(scene),
                 timeout = fps
@@ -72,38 +70,40 @@ const Game = {
 
         clickPosition: null,
 
-        findButton: (test, callback) => {
-            Game.input.buttons.forEach(button => {
+        findButton: function (test, callback) {
+            this.buttons.forEach(button => {
                 if (test(button)) {
                     callback(button)
                 }
             })
         },
 
-        resetPressedEvents: () => {
-            Game.input.buttons.forEach(button => {
+        resetPressedEvents: function () {
+            this.buttons.forEach(button => {
                 if (button.state == 'pressed') {
                     button.state = 'idle'
                 }
             })
-            Game.input.clickPosition = null
+
+            this.clickPosition = null
         },
         
-        isButtonDown: (buttonName) => {
-            const button = Game.input.buttons.find(b => b.name == buttonName)
+        isButtonDown: function (buttonName) {
+            const button = this.buttons.find(b => b.name == buttonName)
             return button && button.state === 'down'
         },
 
-        isButtonPressed: (buttonName) => {
-            const button = Game.input.buttons.find(b => b.name == buttonName)
+        isButtonPressed: function (buttonName) {
+            const button = this.buttons.find(b => b.name == buttonName)
             return button && button.state === 'pressed'
         },
     },
 
     utils: {
         detectCollision: (element1, element2) => {
-            if(!element1.enabled || !element2.enabled)
+            if(!element1.enabled || !element2.enabled) {
                 return false
+            }
             
             return (
                 element1.pos.x > element2.pos.x
@@ -113,7 +113,7 @@ const Game = {
             )
         },
 
-        isElementOutOfViewport: (element) => (
+        isOutOfViewport: (element) => (
             element.pos.x < 0
             || (element.pos.x + element.width) > canvas.width
             || element.pos.y < 0
