@@ -2,13 +2,13 @@ const canvas = document.querySelector('canvas')
 const ctx = canvas.getContext('2d')
 
 const Game = {
-    loadScene: function(scene, fps = 1000 / 30) {
+    loadScene: function(scene, fps = 30) {
         if(!scene) {
             throw new Error('No scene to be loaded')
         }
 
         if(this.currentScene != null) {
-            clearInterval(this.currentScene.loopID)
+            clearInterval(this.currentScene.loopId)
         }
 
         this.currentScene = scene
@@ -18,9 +18,9 @@ const Game = {
         }
 
         if(scene.update) {
-            scene.loopID = setInterval(
-                handler = () => this.mainLoop(scene),
-                timeout = fps
+            scene.loopId = setInterval(
+                () => this.mainLoop(scene),
+                1000 / fps
             )
         }
     },
