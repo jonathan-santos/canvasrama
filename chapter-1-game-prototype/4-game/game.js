@@ -45,56 +45,59 @@ const gameScene = {
     },
 
     update: () => {
+        const { player, bullet, enemies } = this
+        let { score, gameLost } = this
+        
         ctx.clear()
 
         if (Game.input.isButtonDown('right')) {
-            this.player.velocity.x = 1
+            player.velocity.x = 1
         } else if (Game.input.isButtonDown('left')) {
-            this.player.velocity.x = -1
+            player.velocity.x = -1
         } else {
-            this.player.velocity.x = 0
+            player.velocity.x = 0
         }
 
         if (Game.input.isButtonPressed('circle') || Game.input.clickPosition) {
             bullet.shoot()
         }
 
-        this.player.pos.x += this.player.velocity.x * this.player.speed
+        player.pos.x += player.velocity.x * player.speed
     
-        if(this.player.pos.x < 0) {
-            this.player.pos.x = canvas.width - this.player.width
+        if(player.pos.x < 0) {
+            player.pos.x = canvas.width - player.width
         } 
 
-        if(this.player.pos.x > canvas.width) {
-            this.player.pos.x = 0
+        if(player.pos.x > canvas.width) {
+            player.pos.x = 0
         }
     
-        this.player.draw()
+        player.draw()
     
-        if(this.bullet.enabled) {
-            this.bullet.pos.x = this.player.pos.x + (this.player.width / 2)
-            this.bullet.draw()
+        if(bullet.enabled) {
+            bullet.pos.x = player.pos.x + (player.width / 2)
+            bullet.draw()
         }
     
-        this.enemies.forEach((enemy) => {
+        enemies.forEach((enemy) => {
             enemy.draw()            
 
-            if(this.gameLost)
+            if(gameLost)
                 return
     
             if(enemy.pos.y + enemy.height >= canvas.height) {
-                this.gameLost = true
+                gameLost = true
                 return
             }
             
             enemy.pos.y += enemy.speed
     
-            if(Game.utils.detectCollision(this.bullet, enemy)) {
+            if(Game.utils.detectCollision(bullet, enemy)) {
                 ctx.clearRect(enemy.pos.x, 0, enemy.width, enemy.pos.y)
 
-                this.score += 10
-                enemy.pos.y -= this.bullet.force
-                this.bullet.enabled = false
+                score += 10
+                enemy.pos.y -= bullet.force
+                bullet.enabled = false
             }
         })
     
@@ -102,11 +105,14 @@ const gameScene = {
     
         ctx.drawText('Move with the A and S keys and shoot with the space key or right-clicking with the mouse', 10, 20)
     
-        ctx.drawText(`Score: ${this.score}`, 10, 40, { color: 'rgb(200, 0, 0)'})
+        ctx.drawText(`Score: ${score}`, 10, 40, { color: 'rgb(200, 0, 0)'})
 
-        if(this.gameLost) {
+        if(gameLost) {
             gameScene.gameOver()
         }
+
+        this.score = score
+        this.gameLost = gameLost
     },
 
     gameOver: () => {
@@ -134,14 +140,14 @@ const gameOverScene = {
         this.restartButton.draw()
     },
 
-    restartGame: () => {
-        Game.loadScene(gameScene)
+    update: function() {
+        if (Game.input.isButtonPressed('circle')) {
+            this.restartGame()
+        }
     },
 
-    update: () => {
-        if (Game.input.isButtonPressed('circle')) {
-            gameOverScene.restartGame()
-        }
+    restartGame: () => {
+        Game.loadScene(gameScene)
     }
 }
 
