@@ -2,9 +2,6 @@ const canvas = document.querySelector('canvas')
 const ctx = canvas.getContext('2d')
 
 const Game = {
-    currentScene: null,
-    eventsHandlers: null,
-
     loadScene: function(scene, fps = 1000 / 30) {
         if(!scene) {
             throw new Error('No scene to be loaded')

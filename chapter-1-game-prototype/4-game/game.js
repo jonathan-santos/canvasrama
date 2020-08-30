@@ -1,10 +1,4 @@
 const gameScene = {
-    gameLost: false,
-    score: 0,
-    player: null,
-    bullet: null,
-    enemies: null,
-
     start: () => {
         this.score = 0
         this.gameLost = false
@@ -121,8 +115,6 @@ const gameScene = {
 }
 
 const gameOverScene = {
-    restartButton: null,
-
     start: () => {
         this.restartButton = Game.newElement({
             pos: {

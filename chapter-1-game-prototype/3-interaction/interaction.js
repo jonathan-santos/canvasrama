@@ -1,7 +1,4 @@
 Game.loadScene({
-    player: null,
-    newMousePos: null,
-
     start: () => {
         const playerSize = 50
         this.player = Game.newElement({
