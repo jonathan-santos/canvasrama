@@ -1,15 +1,15 @@
 const gameScene = {
     gameLost: false,
     score: 0,
-    player: {},
-    bullet: {},
-    enemies: {},
+    player: null,
+    bullet: null,
+    enemies: null,
 
     start: () => {
         this.score = 0
         this.gameLost = false
 
-        this.player = Game.utils.newElement({
+        this.player = Game.newElement({
             pos: {
                 x: (canvas.width / 2) - 25,
                 y: 540
@@ -19,7 +19,7 @@ const gameScene = {
             speed: 10,
         })
     
-        this.bullet = Game.utils.newElement({
+        this.bullet = Game.newElement({
             enabled: false,
             pos: {
                 x: player.pos.x + (player.width / 2),
@@ -37,7 +37,7 @@ const gameScene = {
         
         this.enemies = []
         for(let i = 0; i < 5; i++) {
-            this.enemies.push(Game.utils.newElement({
+            this.enemies.push(Game.newElement({
                 pos: {
                     x: 90 + (i * 150),
                     y: -60 - (i * 10)
@@ -67,21 +67,21 @@ const gameScene = {
 
         this.player.pos.x += this.player.velocity.x * this.player.speed
     
-        if(this.player.pos.x < 0)
+        if(this.player.pos.x < 0) {
             this.player.pos.x = canvas.width - this.player.width
-        if(this.player.pos.x > canvas.width)
+        } 
+
+        if(this.player.pos.x > canvas.width) {
             this.player.pos.x = 0
+        }
     
-        // Player
         this.player.draw()
     
-        // Bullet
         if(this.bullet.enabled) {
             this.bullet.pos.x = this.player.pos.x + (this.player.width / 2)
             this.bullet.draw()
         }
     
-        // Enemies
         this.enemies.forEach((enemy) => {
             enemy.draw()            
 
@@ -104,17 +104,15 @@ const gameScene = {
             }
         })
     
-        // Line
         ctx.drawLine(0, 595, canvas.width, 595)
     
-        // Controls
         ctx.drawText('Move with the A and S keys and shoot with the space key or right-clicking with the mouse', 10, 20)
     
-        // Score
         ctx.drawText(`Score: ${this.score}`, 10, 40, { color: 'rgb(200, 0, 0)'})
 
-        if(this.gameLost)
+        if(this.gameLost) {
             gameScene.gameOver()
+        }
     },
 
     gameOver: () => {
@@ -126,7 +124,7 @@ const gameOverScene = {
     restartButton: null,
 
     start: () => {
-        this.restartButton = Game.utils.newElement({
+        this.restartButton = Game.newElement({
             pos: {
                 x: canvas.width / 2 - 90,
                 y: canvas.height / 2 + 100,
@@ -139,7 +137,7 @@ const gameOverScene = {
 
         ctx.drawBackdrop(0.35)
 
-        ctx.drawText('You lose!', 520, restartButton.pos.y - 100, { color: 'rgb(200, 0, 0)', font: '60px serif' })
+        ctx.drawText('You lose!', 290, restartButton.pos.y - 100, { color: 'rgb(200, 0, 0)', font: '60px serif' })
 
         this.restartButton.draw()
     },

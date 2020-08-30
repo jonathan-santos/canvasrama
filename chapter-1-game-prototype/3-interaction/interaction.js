@@ -1,10 +1,10 @@
-const interactionScene = {
+Game.loadScene({
     player: null,
     newMousePos: null,
 
     start: () => {
         const playerSize = 50
-        this.player = Game.utils.newElement({
+        this.player = Game.newElement({
             pos: {
                 x: (canvas.width / 2) - (playerSize / 2),
                 y: (canvas.height / 2) - (playerSize / 2)
@@ -15,10 +15,8 @@ const interactionScene = {
             velocity: {
                 x: 0,
                 y: 0
-            },
+            }
         })
-
-        this.newMousePos = null
     },
 
     update: () => {
@@ -38,24 +36,17 @@ const interactionScene = {
             this.player.velocity.y = 0
         }
 
-        const newPos = {
+        Game.utils.moveElementInsideViewport(this.player, {
             x: this.player.pos.x + this.player.speed * this.player.velocity.x,
             y: this.player.pos.y + this.player.speed * this.player.velocity.y
-        }
-
-        Game.utils.changeElementPosInViewport(this.player, newPos)
+        })
     
         ctx.clear()
     
-        // Box
         this.player.draw()
     
-        // Controls text
         ctx.drawText('Move with WASD keys or with a mouse click', 10, 20)
     
-        // Box position text
         ctx.drawText(`The player is in position x: ${this.player.pos.x}, y: ${this.player.pos.y}`, 10, 40, { color: 'rgb(200, 0, 0)' })
     }
-}
-
-Game.loadScene(interactionScene)
+})

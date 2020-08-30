@@ -1,4 +1,4 @@
-const animacaoScene = {
+Game.loadScene({
     start: () => {
         this.count = 0
     },
@@ -36,6 +36,4 @@ const animacaoScene = {
     
         this.count++
     }
-}
-
-Game.loadScene(animacaoScene)
+})
