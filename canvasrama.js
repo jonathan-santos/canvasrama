@@ -232,11 +232,11 @@ const Game = {
             })
     
             canvas.addEventListener('pointerdown', (e) => {
-                const rect = canvas.getBoundingClientRect()
                 const clickPos = {
-                    x: Math.floor(e.clientX - rect.left),
-                    y: Math.floor(e.clientY - rect.top)
+                    x: e.offsetX * canvas.width / canvas.clientWidth | 0,
+                    y: e.offsetY * canvas.height / canvas.clientHeight | 0
                 }
+            
                 Game.input.clickPosition = clickPos
             })
         },
