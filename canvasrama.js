@@ -217,6 +217,10 @@ const Game = {
                 button.element.addEventListener('pointerup', (e) => {
                     buttonUp(button)
                 })
+
+                button.element.addEventListener('pointerout', (e) => {
+                    buttonUp(button)
+                })
     
                 button.element.addEventListener('pointercancel', (e) => {
                     buttonUp(button)
@@ -230,7 +234,7 @@ const Game = {
             document.addEventListener('keyup', (e) => {
                 isButtonPressed(e, (button) => buttonUp(button))
             })
-    
+
             canvas.addEventListener('pointerdown', (e) => {
                 const clickPos = {
                     x: e.offsetX * canvas.width / canvas.clientWidth | 0,
