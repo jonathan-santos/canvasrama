@@ -9,7 +9,7 @@ Game.loadScene({
             },
             width: playerSize,
             height: playerSize,
-            speed: 20,
+            speed: 10,
             velocity: {
                 x: 0,
                 y: 0

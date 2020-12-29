@@ -2,37 +2,31 @@ const canvas = document.querySelector('canvas')
 const ctx = canvas.getContext('2d')
 
 const Game = {
-    loadScene: function(scene, fps = 30) {
-        if(!scene) {
+    loadScene: (scene) => {
+        if(!scene)
             throw new Error('No scene to be loaded')
-        }
 
-        if(this.currentScene != null) {
-            clearInterval(this.currentScene.loopId)
-        }
+        if(Game.currentScene)
+            cancelAnimationFrame(Game.loopId)
 
-        this.currentScene = scene
+        Game.currentScene = scene
 
-        if(scene.start) {
+        if(scene.start)
             scene.start()
-        }
 
-        if(scene.update) {
-            scene.loopId = setInterval(
-                () => this.mainLoop(scene),
-                1000 / fps
-            )
-        }
+        if(scene.update)
+            Game.loopId = requestAnimationFrame(Game.mainLoop)
     },
 
-    mainLoop: (scene) => {
-        scene.update()
+    mainLoop: () => {
+        Game.currentScene.update()
         Game.input.resetPressedEvents()
+        requestAnimationFrame(Game.mainLoop)
     },
 
     newElement: (params) => {
         const element = {
-            pos: { x: 0, y: 0},
+            pos: { x: 0, y: 0 },
             width: 0,
             height: 0,
             enabled: true,
@@ -46,12 +40,10 @@ const Game = {
             draw: function () {
                 if(this.enabled)
                     Game.renderers[this.renderer](this)
-            },
+                },
             ...params
         }
 
-        element.draw.bind(element)
-        
         return element
     },
     
@@ -67,40 +59,37 @@ const Game = {
 
         clickPosition: null,
 
-        findButton: function (test, callback) {
-            this.buttons.forEach(button => {
-                if (test(button)) {
+        findButton: (test, callback) => {
+            Game.input.buttons.forEach(button => {
+                if (test(button))
                     callback(button)
-                }
             })
         },
 
         resetPressedEvents: function () {
-            this.buttons.forEach(button => {
-                if (button.state == 'pressed') {
+            Game.input.buttons.forEach(button => {
+                if (button.state == 'pressed')
                     button.state = 'idle'
-                }
             })
 
-            this.clickPosition = null
+            Game.input.clickPosition = null
         },
         
         isButtonDown: function (buttonName) {
-            const button = this.buttons.find(b => b.name == buttonName)
+            const button = Game.input.buttons.find(b => b.name == buttonName)
             return button && button.state === 'down'
         },
 
         isButtonPressed: function (buttonName) {
-            const button = this.buttons.find(b => b.name == buttonName)
+            const button = Game.input.buttons.find(b => b.name == buttonName)
             return button && button.state === 'pressed'
         },
     },
 
     utils: {
         detectCollision: (element1, element2) => {
-            if(!element1.enabled || !element2.enabled) {
+            if(!element1.enabled || !element2.enabled)
                 return false
-            }
             
             return (
                 element1.pos.x > element2.pos.x
@@ -118,17 +107,15 @@ const Game = {
         ),
     
         moveElementInsideViewport: (element, newPos) => {
-            if(newPos.x < 0) {
+            if(newPos.x < 0)
                 newPos.x = 0
-            } else if((newPos.x + element.width) > canvas.width) {
+            else if((newPos.x + element.width) > canvas.width)
                 newPos.x = canvas.width - element.width
-            }
 
-            if(newPos.y < 0) {
+            if(newPos.y < 0)
                 newPos.y = 0
-            } else if((newPos.y + element.height) > canvas.height) {
+            else if((newPos.y + element.height) > canvas.height)
                 newPos.y = canvas.height - element.height
-            }
     
             element.pos = newPos
         }
@@ -158,14 +145,14 @@ const Game = {
     },
 
     config: {
-        run: function() {
+        run: () => {
             canvas.width = 800
             canvas.height = 600
             canvas.innerHTML = 'Unfortunely your Browser doesn\'t support canvas :('
 
-            this.createButtons()
-            this.registerInputEvents()
-            this.extendCtxFunctions()
+            Game.config.createButtons()
+            Game.config.registerInputEvents()
+            Game.config.extendCtxFunctions()
         },
 
         createButtons: () => {
