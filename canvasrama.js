@@ -3,6 +3,8 @@ const ctx = canvas.getContext('2d')
 
 const Game = {
     loadScene: (scene) => {
+        Game.running = false
+
         if(!scene)
             throw new Error('No scene to be loaded')
 
@@ -15,14 +17,22 @@ const Game = {
         if(scene.start)
             scene.start(scene.state)
 
-        if(scene.update)
-            Game.loop = requestAnimationFrame(Game.mainLoop)
+        if(scene.update) {
+            setTimeout(() => {
+                Game.running = true
+                Game.loop = requestAnimationFrame(Game.mainLoop)
+            }, 50)
+        }
     },
+
+    running: true,
 
     mainLoop: () => {
         Game.currentScene.update(Game.currentScene.state)
         Game.input.resetPressedEvents()
-        requestAnimationFrame(Game.mainLoop)
+
+        if (Game.running)
+            requestAnimationFrame(Game.mainLoop)
     },
 
     newElement: (params) => {

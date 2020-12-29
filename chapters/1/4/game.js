@@ -1,8 +1,5 @@
-let i = 0
-
 const gameScene = {
     start: (state) => {
-
         state.score = 0
         state.gameLost = false
 
@@ -48,8 +45,7 @@ const gameScene = {
     },
 
     update: (state) => {
-        const { player, bullet, enemies } = state
-        let { gameLost } = state
+        let { player, bullet, enemies, gameLost } = state
 
         ctx.clear()
 
