@@ -7,25 +7,26 @@ const Game = {
             throw new Error('No scene to be loaded')
 
         if(Game.currentScene)
-            cancelAnimationFrame(Game.loopId)
+            cancelAnimationFrame(Game.loop)
 
         Game.currentScene = scene
+        Game.currentScene.state = {}
 
         if(scene.start)
-            scene.start()
+            scene.start(scene.state)
 
         if(scene.update)
-            Game.loopId = requestAnimationFrame(Game.mainLoop)
+            Game.loop = requestAnimationFrame(Game.mainLoop)
     },
 
     mainLoop: () => {
-        Game.currentScene.update()
+        Game.currentScene.update(Game.currentScene.state)
         Game.input.resetPressedEvents()
         requestAnimationFrame(Game.mainLoop)
     },
 
     newElement: (params) => {
-        const element = {
+        return {
             pos: { x: 0, y: 0 },
             width: 0,
             height: 0,
@@ -43,8 +44,6 @@ const Game = {
                 },
             ...params
         }
-
-        return element
     },
     
     input: {
@@ -59,6 +58,14 @@ const Game = {
 
         clickPosition: null,
 
+        hasClickedInside: (element) => {
+            const { clickPosition } = Game.input
+
+            return clickPosition != null
+                && clickPosition.x > element.pos.x && clickPosition.x < element.pos.x + element.width
+                && clickPosition.y > element.pos.y && clickPosition.y < element.pos.y + element.height
+        },
+
         findButton: (test, callback) => {
             Game.input.buttons.forEach(button => {
                 if (test(button))
@@ -66,7 +73,7 @@ const Game = {
             })
         },
 
-        resetPressedEvents: function () {
+        resetPressedEvents: () => {
             Game.input.buttons.forEach(button => {
                 if (button.state == 'pressed')
                     button.state = 'idle'
@@ -75,12 +82,12 @@ const Game = {
             Game.input.clickPosition = null
         },
         
-        isButtonDown: function (buttonName) {
+        isButtonDown: (buttonName) => {
             const button = Game.input.buttons.find(b => b.name == buttonName)
             return button && button.state === 'down'
         },
 
-        isButtonPressed: function (buttonName) {
+        isButtonPressed: (buttonName) => {
             const button = Game.input.buttons.find(b => b.name == buttonName)
             return button && button.state === 'pressed'
         },
@@ -132,15 +139,33 @@ const Game = {
             ctx.drawOval(element.pos.x, element.pos.y, element.width)
         },
 
-        button: (element) => {
-            ctx.drawButton(
-                x = element.pos.x,
-                y = element.pos.y,
-                width = element.width,
-                height = element.height,
-                text = element.text,
-                element.style
-            )
+        button: ({ pos, width, height, text, style}) => {
+            const { x, y } = pos
+
+            style = {
+                borderColor: '#333',
+                backgroundColor: '#eee',
+                color: '#333',
+                fontSize: 1.4,
+                font: 'serif',
+                borderWidth: 2,
+                ...style
+            }
+        
+            ctx.strokeStyle = style.borderColor
+            ctx.lineWidth = style.borderWidth
+            ctx.fillStyle = style.backgroundColor
+        
+            ctx.strokeRect(x, y, width + style.borderWidth, height + style.borderWidth)
+            ctx.fillRect(x + style.borderWidth, y + style.borderWidth, width - style.borderWidth, height - style.borderWidth)
+        
+            ctx.fillStyle = style.color
+            ctx.font = `${style.fontSize}rem ${style.font}`
+        
+            const textSize = ctx.measureText(text)
+            const textPositionX = x + (width / 2) - (textSize.width / 2.25)
+            const textPositionY = y + (style.fontSize * 16 / 2.75) + (height / 2)
+            ctx.fillText(text, textPositionX, textPositionY)
         }
     },
 
@@ -240,28 +265,6 @@ const Game = {
             ctx.drawBackdrop = (opacity) => {
                 ctx.fillStyle = `rgb(0, 0, 0, ${opacity})`
                 ctx.fillRect(0, 0, canvas.width, canvas.height)
-            }
-            
-            ctx.drawButton = (x, y, width, height, text, style) => {
-                style = {
-                    borderColor: '#333',
-                    backgroundColor: '#eee',
-                    color: '#333',
-                    font: '20px serif',
-                    ...style
-                }
-            
-                ctx.strokeStyle = style.borderColor
-                ctx.fillStyle = style.backgroundColor
-            
-                ctx.strokeRect(x, y, width, height)
-                ctx.fillRect(x + 1, y + 1, width - 1, height - 1)
-            
-                ctx.fillStyle = style.color
-                ctx.font = style.font
-            
-                const textPositionX = x + (width / 2) - (text.length * 4)
-                ctx.fillText(text, textPositionX, y + height / 2 + 5)
             }
             
             ctx.drawOval = (x, y, size, fill = true) => {

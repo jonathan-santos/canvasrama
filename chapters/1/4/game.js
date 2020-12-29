@@ -1,9 +1,12 @@
-const gameScene = {
-    start: () => {
-        this.score = 0
-        this.gameLost = false
+let i = 0
 
-        this.player = Game.newElement({
+const gameScene = {
+    start: (state) => {
+
+        state.score = 0
+        state.gameLost = false
+
+        state.player = Game.newElement({
             pos: {
                 x: (canvas.width / 2) - 25,
                 y: 540
@@ -13,64 +16,60 @@ const gameScene = {
             speed: 10,
         })
     
-        this.bullet = Game.newElement({
+        state.bullet = Game.newElement({
             enabled: false,
             pos: {
-                x: player.pos.x + (player.width / 2),
-                y: player.pos.y
+                x: state.player.pos.x + (state.player.width / 2),
+                y: state.player.pos.y
             },
             width: 1,
             height: -600,
             color: 'rgb(200, 0, 0)',
             force: 30,
             shoot: () => {
-                bullet.enabled = true
-                setTimeout(() => bullet.enabled = false, 100)
+                state.bullet.enabled = true
+                setTimeout(() => state.bullet.enabled = false, 100)
             }
         })
         
-        this.enemies = []
+        state.enemies = []
         for(let i = 0; i < 5; i++) {
-            this.enemies.push(Game.newElement({
+            state.enemies.push(Game.newElement({
                 pos: {
                     x: 90 + (i * 150),
                     y: -60 - (i * 10)
                 },
                 width: 50,
                 height: 50,
-                speed: Math.floor(Math.random() * 1.5 + 1),
+                speed: Math.floor(Math.random() * 0.5 + 1),
                 color: 'rgb(0, 200, 0)'
             }))
         }
     },
 
-    update: () => {
-        const { player, bullet, enemies } = this
-        let { score, gameLost } = this
-        
+    update: (state) => {
+        const { player, bullet, enemies } = state
+        let { gameLost } = state
+
         ctx.clear()
 
-        if (Game.input.isButtonDown('right')) {
+        if (Game.input.isButtonDown('right'))
             player.velocity.x = 1
-        } else if (Game.input.isButtonDown('left')) {
+        else if (Game.input.isButtonDown('left'))
             player.velocity.x = -1
-        } else {
+        else
             player.velocity.x = 0
-        }
 
-        if (Game.input.isButtonPressed('circle') || Game.input.clickPosition) {
+        if (Game.input.isButtonPressed('circle') || Game.input.clickPosition)
             bullet.shoot()
-        }
 
         player.pos.x += player.velocity.x * player.speed
     
-        if(player.pos.x < 0) {
+        if(player.pos.x < 0)
             player.pos.x = canvas.width - player.width
-        } 
 
-        if(player.pos.x > canvas.width) {
+        if(player.pos.x > canvas.width)
             player.pos.x = 0
-        }
     
         player.draw()
     
@@ -95,7 +94,7 @@ const gameScene = {
             if(Game.utils.detectCollision(bullet, enemy)) {
                 ctx.clearRect(enemy.pos.x, 0, enemy.width, enemy.pos.y)
 
-                score += 10
+                state.score += 10
                 enemy.pos.y -= bullet.force
                 bullet.enabled = false
             }
@@ -105,24 +104,16 @@ const gameScene = {
     
         ctx.drawText('Move with the A and S keys and shoot with the space key or right-clicking with the mouse', 10, 20)
     
-        ctx.drawText(`Score: ${score}`, 10, 40, { color: 'rgb(200, 0, 0)'})
+        ctx.drawText(`Score: ${state.score}`, 10, 40, { color: 'rgb(200, 0, 0)'})
 
-        if(gameLost) {
-            gameScene.gameOver()
-        }
-
-        this.score = score
-        this.gameLost = gameLost
-    },
-
-    gameOver: () => {
-        Game.loadScene(gameOverScene)
+        if(gameLost)
+            Game.loadScene(gameOverScene)
     }
 }
 
 const gameOverScene = {
-    start: () => {
-        this.restartButton = Game.newElement({
+    start: (state) => {
+        state.restartButton = Game.newElement({
             pos: {
                 x: canvas.width / 2 - 90,
                 y: canvas.height / 2 + 100,
@@ -135,19 +126,15 @@ const gameOverScene = {
 
         ctx.drawBackdrop(0.35)
 
-        ctx.drawText('You lose!', 290, restartButton.pos.y - 100, { color: 'rgb(200, 0, 0)', font: '60px serif' })
+        ctx.drawText('You lose!', 255, state.restartButton.pos.y - 100, { color: 'rgb(225, 0, 0)', font: '5rem serif' })
 
-        this.restartButton.draw()
+        state.restartButton.draw()
     },
 
-    update: function() {
-        if (Game.input.isButtonPressed('circle')) {
-            this.restartGame()
-        }
-    },
-
-    restartGame: () => {
-        Game.loadScene(gameScene)
+    update: ({ restartButton }) => {
+        if (Game.input.isButtonPressed('circle')
+            || Game.input.hasClickedInside(restartButton))
+            Game.loadScene(gameScene)
     }
 }
 

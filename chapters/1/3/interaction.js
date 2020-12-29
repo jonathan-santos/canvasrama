@@ -1,8 +1,8 @@
 Game.loadScene({
-    start: () => {
+    start: (state) => {
         const playerSize = 50
 
-        this.player = Game.newElement({
+        state.player = Game.newElement({
             pos: {
                 x: (canvas.width / 2) - (playerSize / 2),
                 y: (canvas.height / 2) - (playerSize / 2)
@@ -17,9 +17,7 @@ Game.loadScene({
         })
     },
 
-    update: () => {
-        const { player } = this
-        
+    update: ({ player }) => {
         ctx.clear()
 
         if (Game.input.isButtonDown('right'))
